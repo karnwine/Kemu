@@ -30,19 +30,18 @@ def getPartDictRecursively(lines):
             lastPotentialNodeName = line.strip()
     return partDict
 
+def unwrapPartDictTopLevel(partDict):
+    topLevelPartKey = [k for k in partDict.keys()][0]
+    if "PART" not in topLevelPartKey:
+        print(f"\033[93munwrapPartDictTopLevel(): WARNING - Unexpected top-level key \"{topLevelPartKey}\".\033[0m")
+        return partDict
+    return partDict[topLevelPartKey]
+
 def getPartDict(lines):
     linesGenerator = (line for line in lines)
     partDict = getPartDictRecursively(linesGenerator)
-    try:
-        return partDict["PART"]
-    except KeyError:
-        return partDict["\ufeffPART"]
-
-import Kemu
-
-# testFile = "testPart.cfg"
-testFile = "/home/keith/kspTestingTmp/GameData/Squad/Parts/Engine/jetEngines/jetEngineTurbo.cfg"
-partDict = getPartDict(Kemu.getLines(testFile))
+    partDict = unwrapPartDictTopLevel(partDict)
+    return partDict
 
 def getValueFromKey(keyName, partDict):
     for key, value in partDict.items():
@@ -53,6 +52,3 @@ def getValueFromKey(keyName, partDict):
             if result is not None:
                 return result
     return None
-
-value = getValueFromKey("velCurve", partDict)
-print(value)

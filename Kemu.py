@@ -3,6 +3,9 @@ from pathlib import Path
 
 from CttData import CttData
 from Filepaths import Filepaths
+from Part import Part
+import LocalizationParser
+import PartParser
 
 def getLines(filepath):
     lines = []
@@ -38,19 +41,33 @@ gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
 # gamedataPath = "/home/keith/kspTestingTmp/GameData"
 
 # directoryName = "NearFutureAeronautics"
-# directoryName = "FarFutureTechnologies"
-directoryName = "Squad/Parts"
+directoryName = "FarFutureTechnologies"
+# directoryName = "Squad/Parts"
 # directoryName = "SquadExpansion/MakingHistory/Parts"
 # directoryName = "SquadExpansion/Serenity/Parts"
 
-# techTierData = getCsvData("kttTechTiers.csv")
+techTierData = getCsvData("kttTechTiers.csv")
 
-# filepaths = Filepaths(gamedataPath, directoryName)
-# cttPatchLines = getLines(filepaths.cttPatchFilepath)
-# cttPatchData = CttData(cttPatchLines)
-# cfgFilepaths = filepaths.cfgFilepaths
-# partCfgFilepaths = filepaths.partCfgFilepaths
-# print(partCfgFilepaths[150])
+filepaths = Filepaths(gamedataPath, directoryName)
+partCfgFilepaths = filepaths.partCfgFilepaths
+print(partCfgFilepaths[0])
+parts = []
+localizationDict = LocalizationParser.getLocalizationDict(filepaths.localizationPath)
+
+for i in range(len(partCfgFilepaths)):
+    partDict = PartParser.getPartDict(getLines(partCfgFilepaths[i]))
+    part = Part(directoryName, partDict, localizationDict)
+    parts.append(part)
+
+num = 1
+for part in parts:
+    print(str(num), end=": ")
+    print(f"\033[92mName: {part.name}", end=" ")
+    print(f"\033[94mMod: {part.mod}\033[0m", end = " ")
+    print(f"\033[93mTitle: {part.title}\033[0m")
+    num += 1
+
+
 
 
 
