@@ -11,6 +11,14 @@ class TechTreeModding:
             if row[0] == techNode:
                 return row[1]
         return "TECH NODE NOT FOUND"
+    
+    @staticmethod
+    def updatePartWithCttPatch(part, cttPatchData):
+        for key, value in cttPatchData:
+            if key == part.name:
+                part.tech = value
+                return            
+        print(f"{part.name} not found in CTT Patch")            
 
     @classmethod
     def generateTechTreeCsvData(cls, parts):

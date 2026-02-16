@@ -29,12 +29,6 @@ class Part:
         title = LocalizationParser.lookupLocalization(title, self.localizationDict)
         return title
 
-    def updateTechForCttPatch(self, cttPatchData):
-        if cttPatchData == None:
-            return
-        if self.name in cttPatchData:
-            self.techRequired = cttPatchData[self.name]
-
     def getBasicPartStats(self):
         self.name = PartParser.getValueFromKey("name", self.partDict)
         self.mod = self.getMod()
