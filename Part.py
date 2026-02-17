@@ -1,4 +1,3 @@
-from CttData import CttData
 import LocalizationParser
 import PartParser
 
@@ -12,7 +11,7 @@ class Part:
         self.mod = ""
         self.category = ""
         self.title = ""
-        self.techRequired = ""
+        self.tech = ""
         self.cost = ""
         self.getBasicPartStats()
 
@@ -34,5 +33,5 @@ class Part:
         self.mod = self.getMod()
         self.category = PartParser.getValueFromKey("category", self.partDict)
         self.title = self.getTitle()
-        self.techRequired = PartParser.getValueFromKey("TechRequired", self.partDict)
+        self.tech = PartParser.getValueFromKey("TechRequired", self.partDict)
         self.cost = PartParser.getValueFromKey("cost", self.partDict)

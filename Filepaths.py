@@ -47,14 +47,14 @@ class Filepaths:
         return cfgFilepaths
 
     def getCttPatchFilepath(self, directoryName, cfgFilepaths):
-        if "Squad" in directoryName:
-            return "CTT Patch"
+        directoryName = directoryName.lower()
+        if "squad" in directoryName or "squadexpansion" in directoryName:
+            return Path()
         for filepath in cfgFilepaths:
             checkedFilepath = filepath.lower()
             checkedFilepath = "".join(checkedFilepath.split())
             if "ctt" in checkedFilepath or "communitytechtree" in checkedFilepath:
                 return Path(filepath)
-        return "CTT Patch"
 
     def getPartCfgFilepaths(self, cfgFilepaths):
         partCfgFilepaths = []
