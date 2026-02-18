@@ -33,8 +33,7 @@ def getPartDictRecursively(lines):
 def unwrapPartDictTopLevel(partDict):
     topLevelPartKey = [k for k in partDict.keys()][0]
     if "PART" not in topLevelPartKey:
-        print(f"\033[93munwrapPartDictTopLevel(): WARNING - Unexpected top-level key \"{topLevelPartKey}\".\033[0m")
-        return partDict
+        return {}
     return partDict[topLevelPartKey]
 
 def getPartDict(lines):

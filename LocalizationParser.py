@@ -1,12 +1,11 @@
-def getLocalizationDict(localizationPath):
+def getLocalizationDict(localizationFileLines):
     localizationDict = {}
-    with open(localizationPath, "r", encoding="UTF-8") as localizationFile:
-        for line in localizationFile.readlines():
-            if "=" in line:
-                key = line.split("=")[0].strip()
-                value = line.split("=")[1].strip()
-                value = value.split("//")[0].strip()
-                localizationDict[key] = value
+    for line in localizationFileLines:
+        if "=" in line:
+            key = line.split("=")[0].strip()
+            value = line.split("=")[1].strip()
+            value = value.split("//")[0].strip()
+            localizationDict[key] = value
     return localizationDict
 
 def lookupLocalization(value, localizationDict):

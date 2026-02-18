@@ -4,33 +4,32 @@ import PartParser
 class Part:
 
     def __init__(self, directoryName, partDict, localizationDict):
-        self.directoryName = directoryName
         self.partDict = partDict
         self.localizationDict = localizationDict
         self.name = ""
-        self.mod = ""
+        self.mod = self.getMod(directoryName)
         self.category = ""
         self.title = ""
         self.tech = ""
         self.cost = ""
-        self.getBasicPartStats()
+        self.getPartStats()
 
-    def getMod(self):
-        directoryName = self.directoryName.lower()
-        if "squadexpansion" in directoryName:
-            return "Stock Expansion"
-        if "squad" in directoryName:
+    def getMod(self, directoryName):
+        if "makinghistory" in directoryName.lower():
+            return "MakingHistory"
+        if "serenity" in directoryName.lower():
+            return "BreakingGround"
+        if "squad" in directoryName.lower():
             return "Stock"
-        return self.directoryName
+        return directoryName
 
     def getTitle(self):
         title = PartParser.getValueFromKey("title", self.partDict)
         title = LocalizationParser.lookupLocalization(title, self.localizationDict)
         return title
 
-    def getBasicPartStats(self):
+    def getPartStats(self):
         self.name = PartParser.getValueFromKey("name", self.partDict)
-        self.mod = self.getMod()
         self.category = PartParser.getValueFromKey("category", self.partDict)
         self.title = self.getTitle()
         self.tech = PartParser.getValueFromKey("TechRequired", self.partDict)

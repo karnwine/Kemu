@@ -1,4 +1,5 @@
-import io
+import csv, io, sys
+from pathlib import Path
 
 def lookupTechTreeTier(techTierData, techNode):
     for row in techTierData:
@@ -6,11 +7,11 @@ def lookupTechTreeTier(techTierData, techNode):
             return row[1]
     return "TECH NODE NOT FOUND"
 
-def updatePartWithCttPatch(part, cttPatchDict):
-    for key, value in cttPatchDict.items():
-        if key == part.name:
-            part.tech = value
-            return
+def updatePartsForNewTech(parts, newTechDict):
+    for part in parts:
+        if part.name in newTechDict:
+            part.tech = newTechDict[part.name]
+    return parts
 
 def generateTechTreeCsvData(parts, techTierData):
     csvData = []
@@ -20,13 +21,33 @@ def generateTechTreeCsvData(parts, techTierData):
         csvData.append((part.title, part.category, part.name, part.tech, techTier))
     return csvData
 
-def createTechTreePatch(parts):
-    pass
-    # modName = parts[0].mod
-    # with io.open(f"TechTreePatch_{modName}.cfg", 'w', encoding="UTF-8") as file:
-    #     for part in parts:
-    #         techTier = cls.lookupTechTreeTier(part.tech)
-    #         file.write(f"@PART[{part.name}]:FINAL // {part.title}\n")
-    #         file.write("{\n")
-    #         file.write(f"\t@techRequired = {part.tech} // Tier {techTier}\n")
-    #         file.write("}\n")
+def createCsvForTechTreePatch(parts, techTierData):
+    mod = parts[0].mod
+    filename = f"ForTechTreePatch_{mod}.csv"
+    columnNames = ["Part Title", "Part Category", "Part Name", "Tech Node", "Tech Tier"]
+    rows = generateTechTreeCsvData(parts, techTierData)
+    with open(filename, 'w', encoding="UTF-8", newline="") as csvfile:
+        csvWriter = csv.writer(csvfile)
+        csvWriter.writerow(columnNames)
+        csvWriter.writerows(rows)
+
+def getNewTechDictFromCsv(filepath):
+    newTechDict = {}
+    with open(filepath, 'r', encoding="UTF-8") as csvfile:
+        csvReader = csv.reader(csvfile)
+        next(csvReader)
+        for row in csvReader:
+            partName = row[2]
+            newTech = row[3]
+            newTechDict[partName] = newTech
+    return newTechDict
+
+def createTechTreePatch(parts, techTierData):
+    modName = parts[0].mod
+    with io.open(f"TechTreePatch_{modName}.cfg", 'w', encoding="UTF-8") as file:
+        for part in parts:
+            techTier = lookupTechTreeTier(techTierData, part.tech)
+            file.write(f"@PART[{part.name}]:FINAL // {part.title}\n")
+            file.write("{\n")
+            file.write(f"\t@techRequired = {part.tech} // Tier {techTier}\n")
+            file.write("}\n")
