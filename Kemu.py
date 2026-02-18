@@ -42,6 +42,14 @@ def getPartDicts(partCfgFilepaths):
         partDict = PartParser.getPartDict(getLines(filepath))
         if partDict == {}:
             continue
+        if PartParser.getValueFromKey("TechRequired", partDict) == "Unresearcheable":
+            continue
+        if PartParser.getValueFromKey("TechHidden", partDict) == "True":
+            continue
+        if PartParser.getValueFromKey("TechHidden", partDict) == "true":
+            continue
+        if partDict.get("module") == None:
+            continue
         partDicts.append(partDict)
     return partDicts
 
@@ -59,8 +67,8 @@ def getParts(directoryName):
     return parts
 
 # gamedataPath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Kerbal Space Program\\GameData"
-# gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
-gamedataPath = "/home/keith/kspTestingTmp/GameData"
+gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
+# gamedataPath = "/home/keith/kspTestingTmp/GameData"
 
 # directoryName = "NearFutureAeronautics"
 # directoryName = "FarFutureTechnologies"
@@ -73,12 +81,14 @@ techTierData = getCsvData("kttTechTiers.csv")
 # nfaParts = getParts("NearFutureAeronautics")
 # TechTreeModding.createCsvForTechTreePatch(nfaParts, techTierData)
 
-fftParts = getParts("FarFutureTechnologies")
+# fftParts = getParts("FarFutureTechnologies")
 # TechTreeModding.createCsvForTechTreePatch(fftParts, techTierData)
 
-for part in fftParts:
+stockParts = getParts("Squad/Parts")
 
-    print(PartParser.getValueFromKey("maxThrust_2", part.partDict))
+for index, part in enumerate(stockParts):
+    print(f"Part {index + 1}: {part.title} maxThrust = ", end = "")
+    print(PartParser.getValueFromKey("maxThrust", part.partDict))
 
 
 ### User modifies CSV here ###
