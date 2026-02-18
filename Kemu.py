@@ -7,7 +7,7 @@ import PartParser
 import TechTreeModding
 
 from Filepaths import Filepaths
-from Part import Part
+from Parts.Part import Part
 
 def getLines(filepath):
     lines = []
@@ -55,7 +55,11 @@ def getParts(directoryName):
         parts.append(part)
     if filepaths.cttPatchFilepath != Path():
         cttPatchDict = CttPatchParser.getCttPatchDict(getLines(filepaths.cttPatchFilepath))
+<<<<<<< HEAD
         parts = TechTreeModding.updatePartsForNewTech(parts, cttPatchDict)  
+=======
+        parts = TechTreeModding.updatePartsForNewTech(parts, cttPatchDict)
+>>>>>>> 45d5c5b (start on Engine object)
     return parts
 
 # gamedataPath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Kerbal Space Program\\GameData"
@@ -70,11 +74,30 @@ gamedataPath = "/home/keith/kspTestingTmp/GameData"
 
 techTierData = getCsvData("kttTechTiers.csv")
 
+<<<<<<< HEAD
 nfaParts = getParts("NearFutureAeronautics")
 # TechTreeModding.createCsvForTechTreePatch(nfaParts, techTierData)
 ### User modifies CSV here ###
 nfaNewTechDict = TechTreeModding.getNewTechDictFromCsv("ForTechTreePatch_NearFutureAeronautics.csv")
 nfaParts = TechTreeModding.updatePartsForNewTech(nfaParts, nfaNewTechDict)
 TechTreeModding.createTechTreePatch(nfaParts, techTierData)
+=======
+# nfaParts = getParts("NearFutureAeronautics")
+# TechTreeModding.createCsvForTechTreePatch(nfaParts, techTierData)
+
+fftParts = getParts("FarFutureTechnologies")
+# TechTreeModding.createCsvForTechTreePatch(fftParts, techTierData)
+
+for part in fftParts:
+
+    print(PartParser.getValueFromKey("maxThrust_2", part.partDict))
+
+
+### User modifies CSV here ###
+
+# nfaNewTechDict = TechTreeModding.getNewTechDictFromCsv("ForTechTreePatch_NearFutureAeronautics.csv")
+# nfaParts = TechTreeModding.updatePartsForNewTech(nfaParts, nfaNewTechDict)
+# TechTreeModding.createTechTreePatch(nfaParts, techTierData)
+>>>>>>> 45d5c5b (start on Engine object)
 
 
