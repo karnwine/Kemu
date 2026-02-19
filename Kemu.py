@@ -8,12 +8,14 @@ import TechTreeModding
 
 from Filepaths import Filepaths
 from Parts.Part import Part
+from Parts.Engine import Engine
 
 RED = "\033[91m"
 RESET = "\033[0m"
 
 def getLines(filepath):
     lines = []
+
     try:
         with open(filepath, "r", encoding="UTF-8") as currentFile:
             for line in currentFile.readlines():
@@ -45,32 +47,38 @@ def getPartDicts(partCfgFilepaths):
         partDict = PartParser.getPartDict(getLines(filepath))
         if partDict == {}:
             continue
-
         if PartParser.getValueFromKey("TechRequired", partDict) == "Unresearcheable":
+            continue
+        if partDict.get("module") == None:
             continue
 
         val = PartParser.getValueFromKey("TechHidden", partDict)
         if val and val.lower() == "true":
             continue
 
-        if partDict.get("module") == None:
-            continue
-
         partDicts.append(partDict)
 
     return partDicts
 
-def getParts(directoryName):
+def createPart(directoryName, partDict, localizationDict):
+    if PartParser.getValueFromKey("maxThrust", partDict) != None:
+        return Engine(directoryName, partDict, localizationDict)
+    return Part(directoryName, partDict, localizationDict)
+
+def getAllParts(directoryName):
     filepaths = Filepaths(gamedataPath, directoryName)
     localizationDict = LocalizationParser.getLocalizationDict(getLines(filepaths.localizationPath))
     partDicts = getPartDicts(filepaths.partCfgFilepaths)
     parts = []
+
     for partDict in partDicts:
-        part = Part(directoryName, partDict, localizationDict)
+        part = createPart(directoryName, partDict, localizationDict)
         parts.append(part)
+
     if filepaths.cttPatchFilepath != Path():
         cttPatchDict = CttPatchParser.getCttPatchDict(getLines(filepaths.cttPatchFilepath))
         parts = TechTreeModding.updatePartsForNewTech(parts, cttPatchDict)
+
     return parts
 
 # gamedataPath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Kerbal Space Program\\GameData"
@@ -91,12 +99,7 @@ techTierData = getCsvData("kttTechTiers.csv")
 # fftParts = getParts("FarFutureTechnologies")
 # TechTreeModding.createCsvForTechTreePatch(fftParts, techTierData)
 
-stockParts = getParts("Squad/Parts")
-
-for index, part in enumerate(stockParts):
-    print(f"Part {index + 1}: {part.title} maxThrust = ", end = "")
-    print(PartParser.getValueFromKey("maxThrust", part.partDict))
-
+stockParts = getAllParts("Squad/Parts")
 
 ### User modifies CSV here ###
 
