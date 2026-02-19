@@ -18,4 +18,4 @@ class Engine(Part):
             value = value.split(" ")
             if value[0].strip() == atmValue:
                 return value[1].strip()
-        return None
+        return -1

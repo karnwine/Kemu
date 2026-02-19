@@ -9,6 +9,7 @@ import TechTreeModding
 from Filepaths import Filepaths
 from Parts.Part import Part
 from Parts.Engine import Engine
+from Parts.JetEngine import JetEngine
 
 RED = "\033[91m"
 RESET = "\033[0m"
@@ -61,6 +62,8 @@ def getPartDicts(partCfgFilepaths):
     return partDicts
 
 def createPart(directoryName, partDict, localizationDict):
+    if PartParser.getValueFromKey("velCurve", partDict) != None:
+        return JetEngine(directoryName, partDict, localizationDict)
     if PartParser.getValueFromKey("maxThrust", partDict) != None:
         return Engine(directoryName, partDict, localizationDict)
     return Part(directoryName, partDict, localizationDict)
@@ -93,13 +96,17 @@ gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
 
 techTierData = getCsvData("kttTechTiers.csv")
 
-# nfaParts = getParts("NearFutureAeronautics")
+nfaParts = getAllParts("NearFutureAeronautics")
 # TechTreeModding.createCsvForTechTreePatch(nfaParts, techTierData)
 
-# fftParts = getParts("FarFutureTechnologies")
+# fftParts = getAllParts("FarFutureTechnologies")
 # TechTreeModding.createCsvForTechTreePatch(fftParts, techTierData)
 
-stockParts = getAllParts("Squad/Parts")
+# stockParts = getAllParts("Squad/Parts")
+
+for part in nfaParts:
+    if isinstance(part, JetEngine):
+        print(f"{part.name} - Isp: {part.ispVac} maxJetThrust: {part.maxThrust}")
 
 ### User modifies CSV here ###
 
