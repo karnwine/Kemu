@@ -57,6 +57,9 @@ def getPartDicts(partCfgFilepaths):
         if val and val.lower() == "true":
             continue
 
+        # maybe remove later - useful for debugging
+        partDict['PATH'] = filepath
+
         partDicts.append(partDict)
 
     return partDicts
@@ -88,25 +91,24 @@ def getAllParts(directoryName):
 gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
 # gamedataPath = "/home/keith/kspTestingTmp/GameData"
 
-# directoryName = "NearFutureAeronautics"
-# directoryName = "FarFutureTechnologies"
-# directoryName = "Squad/Parts"
-# directoryName = "SquadExpansion/MakingHistory/Parts"
-# directoryName = "SquadExpansion/Serenity/Parts"
-
 techTierData = getCsvData("kttTechTiers.csv")
 
 nfaParts = getAllParts("NearFutureAeronautics")
+fftParts = getAllParts("FarFutureTechnologies")
+stockParts = getAllParts("Squad/Parts")
+mhParts = getAllParts("SquadExpansion/MakingHistory/Parts")
+bgParts = getAllParts("SquadExpansion/Serenity/Parts")
+
+def printEnginesWithMoreThanOneEngineModule(parts):
+    for index, part in enumerate(parts):
+        if isinstance(part, Engine):
+            if part.countEngineModules() > 1:
+                print(f"[{index:03}] {part.title:<60}{part.countEngineModules()}")
+
+printEnginesWithMoreThanOneEngineModule(nfaParts)
+
 # TechTreeModding.createCsvForTechTreePatch(nfaParts, techTierData)
-
-# fftParts = getAllParts("FarFutureTechnologies")
 # TechTreeModding.createCsvForTechTreePatch(fftParts, techTierData)
-
-# stockParts = getAllParts("Squad/Parts")
-
-for part in nfaParts:
-    if isinstance(part, JetEngine):
-        print(f"{part.name} - Isp: {part.ispVac} maxJetThrust: {part.maxThrust}")
 
 ### User modifies CSV here ###
 

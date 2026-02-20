@@ -50,4 +50,3 @@ def getValueFromKey(keyName, partDict):
             result = getValueFromKey(keyName, value)
             if result is not None:
                 return result
-    return None

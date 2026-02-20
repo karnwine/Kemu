@@ -32,3 +32,22 @@ class Part:
         self.category = PartParser.getValueFromKey("category", self.partDict)
         self.tech = PartParser.getValueFromKey("TechRequired", self.partDict)
         self.cost = PartParser.getValueFromKey("cost", self.partDict)
+
+    def locateModules(self):
+        modules = []
+        index = 2
+        first = True
+        while True:
+            if first:
+                first = False
+                module = PartParser.getValueFromKey("MODULE", self.partDict)
+                if module == None:
+                    break
+                modules.append(module)
+                continue
+            module = PartParser.getValueFromKey(f"MODULE_{index}", self.partDict)
+            if module == None:
+                break
+            modules.append(module)
+            index += 1
+        return modules
