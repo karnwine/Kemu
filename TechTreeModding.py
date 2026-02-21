@@ -24,8 +24,7 @@ def createCsv(filename, columnNames, rows):
 def generateTechTreeCsvData(parts, techTierData):
     csvData = []
     for part in parts:
-        techNode = part.tech
-        techTier = lookupTechTreeTier(techTierData, techNode)
+        techTier = lookupTechTreeTier(techTierData, part.tech)
         csvData.append((part.title, part.category, part.name, part.tech, techTier))
     return csvData
 
@@ -43,8 +42,7 @@ def generateRocketEngineBalancingCsvData(parts, techTierData):
             continue
         if isinstance(part, JetEngine):
             continue
-        techNode = part.tech
-        techTier = lookupTechTreeTier(techTierData, techNode)
+        techTier = lookupTechTreeTier(techTierData, part.tech)
         ispAsl = int(part.isp['SeaLevel'])
         ispVac = int(part.isp['Vacuum'])
         ispDiff = ispVac - ispAsl
@@ -58,6 +56,24 @@ def createCsvForRocketEngineBalancing(parts, techTierData):
     columnNames = ["Part Title", "Part Name", "Cost", "Size", "Max Thrust",
                    "Isp (ASL)", "Isp (Vac)", "Isp Diff", "Tech Node", "Tech Tier",]
     rows = generateRocketEngineBalancingCsvData(parts, techTierData)
+    createCsv(filename, columnNames, rows)
+
+def generateJetEngineBalancingCsvData(parts, techTierData):
+    csvData = []
+    for part in parts:
+        if not isinstance(part, JetEngine):
+            continue
+        techTier = lookupTechTreeTier(techTierData, part.tech)
+        csvData.append((part.title, part.name, part.cost, part.size,
+                        part.maxThrust, part.isp, part.tech, techTier))
+    return csvData
+
+def createCsvForJetEngineBalancing(parts, techTierData):
+    mod = parts[0].mod
+    filename = f"ForJetEngineBalancing_{mod}.csv"
+    columnNames = ["Part Title", "Part Name", "Cost", "Size",
+                   "Max Thrust(s)", "Isp(s)", "Tech Node", "Tech Tier",]
+    rows = generateJetEngineBalancingCsvData(parts, techTierData)
     createCsv(filename, columnNames, rows)
     
 def getNewTechDictFromCsv(filepath):
