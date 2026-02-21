@@ -113,7 +113,7 @@ def printSomePartStuff(parts):
             print(f"\tMax Thrust: {part.maxThrust}")
             print(f"\tIsp: {part.isp}")
 
-printSomePartStuff(nfaParts)
+TechTreeModding.createCsvForRocketEngineBalancing(stockParts, techTierData)
 
 # TechTreeModding.createCsvForTechTreePatch(nfaParts, techTierData)
 # TechTreeModding.createCsvForTechTreePatch(fftParts, techTierData)

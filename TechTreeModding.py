@@ -1,5 +1,7 @@
 import csv, io, sys
 from pathlib import Path
+from Parts.Engine import Engine
+from Parts.JetEngine import JetEngine
 
 def lookupTechTreeTier(techTierData, techNode):
     for row in techTierData:
@@ -35,7 +37,20 @@ def createCsvForTechTreePatch(parts, techTierData):
     createCsv(filename, columnNames, rows)
 
 def generateRocketEngineBalancingCsvData(parts, techTierData):
-    pass
+    csvData = []
+    for part in parts:
+        if not isinstance(part, Engine):
+            continue
+        if isinstance(part, JetEngine):
+            continue
+        techNode = part.tech
+        techTier = lookupTechTreeTier(techTierData, techNode)
+        ispAsl = int(part.isp['SeaLevel'])
+        ispVac = int(part.isp['Vacuum'])
+        ispDiff = ispVac - ispAsl
+        csvData.append((part.title, part.name, part.cost, part.size, part.maxThrust,
+                        ispAsl, ispVac, ispDiff, techNode, techTier))
+    return csvData
 
 def createCsvForRocketEngineBalancing(parts, techTierData):
     mod = parts[0].mod
