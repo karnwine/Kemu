@@ -13,6 +13,12 @@ def updatePartsForNewTech(parts, newTechDict):
             part.tech = newTechDict[part.name]
     return parts
 
+def createCsv(filename, columnNames, rows):
+    with open(filename, 'w', encoding="UTF-8", newline="") as csvfile:
+        csvWriter = csv.writer(csvfile)
+        csvWriter.writerow(columnNames)
+        csvWriter.writerows(rows)
+
 def generateTechTreeCsvData(parts, techTierData):
     csvData = []
     for part in parts:
@@ -26,11 +32,19 @@ def createCsvForTechTreePatch(parts, techTierData):
     filename = f"ForTechTreePatch_{mod}.csv"
     columnNames = ["Part Title", "Part Category", "Part Name", "Tech Node", "Tech Tier"]
     rows = generateTechTreeCsvData(parts, techTierData)
-    with open(filename, 'w', encoding="UTF-8", newline="") as csvfile:
-        csvWriter = csv.writer(csvfile)
-        csvWriter.writerow(columnNames)
-        csvWriter.writerows(rows)
+    createCsv(filename, columnNames, rows)
 
+def generateRocketEngineBalancingCsvData(parts, techTierData):
+    pass
+
+def createCsvForRocketEngineBalancing(parts, techTierData):
+    mod = parts[0].mod
+    filename = f"ForRocketEngineBalancing_{mod}.csv"
+    columnNames = ["Part Title", "Part Name", "Cost", "Size", "Max Thrust",
+                   "Isp (ASL)", "Isp (Vac)", "Isp Diff", "Tech Node", "Tech Tier",]
+    rows = generateRocketEngineBalancingCsvData(parts, techTierData)
+    createCsv(filename, columnNames, rows)
+    
 def getNewTechDictFromCsv(filepath):
     newTechDict = {}
     with open(filepath, 'r', encoding="UTF-8") as csvfile:
