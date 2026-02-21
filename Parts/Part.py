@@ -9,6 +9,7 @@ class Part:
         self.mod = self.getMod(directoryName)
         self.category = ""
         self.title = self.getTitle(localizationDict)
+        self.size = self.getSize()
         self.tech = ""
         self.cost = ""
         self.getPartStats()
@@ -26,6 +27,40 @@ class Part:
         title = PartParser.getValueFromKey("title", self.partDict)
         title = LocalizationParser.lookupLocalization(title, localizationDict)
         return title
+    
+    def convertSize(self, size):
+        size = size.strip()
+        match size:
+            case "size0":
+                return "0.625m"
+            case "size1":
+                return "1.25m"
+            case "size1p5":
+                return "1.875m"
+            case "size2":
+                return "2.5m"
+            case "size3":
+                return "3.75m"
+            case "size4":
+                return "5m"
+            case _:
+                return size
+    
+    def getSize(self):
+        size = PartParser.getValueFromKey("bulkheadProfiles", self.partDict)
+        if size == None:
+            return "bulkheadProfile(s) not found"
+        size = size.split(",")
+        convertedSize = []
+
+        for s in size:
+            s = self.convertSize(s)
+            convertedSize.append(s)
+
+        if len(convertedSize) == 1:
+            return convertedSize[0]
+
+        return convertedSize
 
     def getPartStats(self):
         self.name = PartParser.getValueFromKey("name", self.partDict)
