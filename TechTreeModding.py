@@ -58,21 +58,26 @@ def createCsvForRocketEngineBalancing(parts, techTierData):
     rows = generateRocketEngineBalancingCsvData(parts, techTierData)
     createCsv(filename, columnNames, rows)
 
+def isMultimode(part):
+    return isinstance(part.maxThrust, dict)
+
 def generateJetEngineBalancingCsvData(parts, techTierData):
     csvData = []
     for part in parts:
         if not isinstance(part, JetEngine):
             continue
+        maxThrustPrimary = list(part.maxThrust.values())[0] if isMultimode(part) else part.maxThrust
+        maxThrustSecondary = list(part.maxThrust.values())[1] if isMultimode(part) else ""
         techTier = lookupTechTreeTier(techTierData, part.tech)
-        csvData.append((part.title, part.name, part.cost, part.size,
-                        part.maxThrust, part.isp, part.tech, techTier))
+        csvData.append((part.title, part.name, part.cost, part.size, maxThrustPrimary,
+                        maxThrustSecondary, part.isp, part.tech, techTier))
     return csvData
 
 def createCsvForJetEngineBalancing(parts, techTierData):
     mod = parts[0].mod
     filename = f"ForJetEngineBalancing_{mod}.csv"
-    columnNames = ["Part Title", "Part Name", "Cost", "Size",
-                   "Max Thrust(s)", "Isp(s)", "Tech Node", "Tech Tier",]
+    columnNames = ["Part Title", "Part Name", "Cost", "Size", "Max Thrust", "Max Thrust (Secondary)",
+                   "Isp(s)", "Tech Node", "Tech Tier",]
     rows = generateJetEngineBalancingCsvData(parts, techTierData)
     createCsv(filename, columnNames, rows)
     
