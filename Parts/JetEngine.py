@@ -5,7 +5,7 @@ class JetEngine(Engine):
 
     def __init__(self, directoryName, partDict, localizationDict):
         super().__init__(directoryName, partDict, localizationDict)
-        # self.maxThrust = self.getMaxThrustJet()
+        self.maxThrust = self.getMaxThrustJet()
         # self.ispAsl = self.getIspJet("1")
         # self.ispVac = self.getIspJet("0")
 
@@ -44,27 +44,23 @@ class JetEngine(Engine):
         velCurveThrustMult = list(velCurveThrustMult.values())[0]
         maxThrust = float(PartParser.getValueFromKey("maxThrust", engineModule))
         maxThrust *= velCurveThrustMult
+        maxThrust = str(int(maxThrust))
         return maxThrust
 
-
-    # def getMaxThrustJet(self):
-    #     if self.countEngineModules() == 1:
-    #         return self.getMaxThrustJetSingle()
-
-    #     maxThrust = {}
-    #     for engineModule in self.getEngineModules():
-
-
-
-    #     # maxThrust = {}
-    #     # for engineModule in self.getEngineModules():
-    #     #     engineId = self.getEngineModuleId(engineModule)
-    #     #     key = f"MaxThrust_{engineId}"
-    #     #     value = PartParser.getValueFromKey("maxThrust", engineModule)
-    #     #     if Engine.isJetModule(engineModule):
-
-    #     #     maxThrust[key] = value
-    #     # return maxThrust
+    def getMaxThrustJet(self):
+        if self.countEngineModules() == 1:
+            return self.getMaxThrustJetSingle()
+        
+        maxThrust = {}
+        for engineModule in self.getEngineModules():
+            engineId = self.getEngineModuleId(engineModule)
+            key = f"MaxThrust_{engineId}"
+            if "velCurve" in engineModule:
+                value = self.getMaxThrustJetSingle()
+            else:
+                value = PartParser.getValueFromKey("maxThrust", engineModule)
+            maxThrust[key] = value
+        return maxThrust
 
     # def getIsp(self, atmValue):
     #     if self.countEngineModules() == 1:

@@ -88,8 +88,8 @@ def getAllParts(directoryName):
     return parts
 
 # gamedataPath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Kerbal Space Program\\GameData"
-gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
-# gamedataPath = "/home/keith/kspTestingTmp/GameData"
+# gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
+gamedataPath = "/home/keith/kspTestingTmp/GameData"
 
 techTierData = getCsvData("kttTechTiers.csv")
 
@@ -105,8 +105,10 @@ def printEnginesWithMoreThanOneEngineModule(parts):
             if part.countEngineModules() > 1:
                 print(f"[{index:03}] {part.title:<60}{part.countEngineModules()}")
 
+printEnginesWithMoreThanOneEngineModule(nfaParts)
+print(nfaParts[18].maxThrust)
+print(nfaParts[18].partDict)
 
-print(nfaParts[1].getMaxThrustJetSingle())
 # TechTreeModding.createCsvForTechTreePatch(nfaParts, techTierData)
 # TechTreeModding.createCsvForTechTreePatch(fftParts, techTierData)
 
