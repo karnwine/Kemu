@@ -65,13 +65,10 @@ class JetEngine(Engine):
         if self.countEngineModules() == 1:
             return self.getIsp()
         
-        return "poop"
-
-    #     isp = {}
-    #     atmLabel = "SeaLevel" if atmValue == "1" else "Vacuum"
-    #     for engineModule in self.getEngineModules():
-    #         engineId = self.getEngineModuleId(engineModule)
-    #         key = f"Isp_{engineId}_{atmLabel}"
-    #         value = self.getIspSingle(atmValue)
-    #         isp[key] = value
-    #     return isp
+        isp = {}
+        for engineModule in self.getEngineModules():
+            engineId = self.getEngineModuleId(engineModule)
+            key = f"Isp_{engineId}"
+            value = self.getIsp()
+            isp[key] = value
+        return isp

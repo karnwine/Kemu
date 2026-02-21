@@ -29,5 +29,4 @@ class Engine(Part):
         isp = {}
         isp["SeaLevel"] = self.getIspValue("1")
         isp["Vacuum"] = self.getIspValue("0")
-        isp = self.checkForNoneValueInIsp(isp)
-        return isp
+        return self.checkForNoneValueInIsp(isp)

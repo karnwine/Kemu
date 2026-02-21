@@ -105,15 +105,15 @@ def printEnginesWithMoreThanOneEngineModule(parts):
             if part.countEngineModules() > 1:
                 print(f"[{index:03}] {part.title:<60}{part.countEngineModules()}")
 
-# printEnginesWithMoreThanOneEngineModule(nfaParts)
+def printSomePartStuff(parts):
+    for index, part in enumerate(parts):
+        if isinstance(part, Engine):
+            print(f"[{index:03}] {part.title}")
+            print(f"\tSize: {part.size}")
+            print(f"\tMax Thrust: {part.maxThrust}")
+            print(f"\tIsp: {part.isp}")
 
-print(nfaParts[16].title)
-print(nfaParts[16].maxThrust)
-print(nfaParts[16].isp, end="\n\n")
-
-print(nfaParts[17].title)
-print(nfaParts[17].maxThrust)
-print(nfaParts[17].isp, end="\n\n")
+printSomePartStuff(fftParts)
 
 # TechTreeModding.createCsvForTechTreePatch(nfaParts, techTierData)
 # TechTreeModding.createCsvForTechTreePatch(fftParts, techTierData)
