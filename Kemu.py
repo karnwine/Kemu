@@ -107,7 +107,7 @@ def printEnginesWithMoreThanOneEngineModule(parts):
 
 printEnginesWithMoreThanOneEngineModule(nfaParts)
 print(nfaParts[18].maxThrust)
-print(nfaParts[18].partDict)
+print(nfaParts[18].isp)
 
 # TechTreeModding.createCsvForTechTreePatch(nfaParts, techTierData)
 # TechTreeModding.createCsvForTechTreePatch(fftParts, techTierData)

@@ -61,6 +61,8 @@ class JetEngine(Engine):
                 value = PartParser.getValueFromKey("maxThrust", engineModule)
             maxThrust[key] = value
         return maxThrust
+    
+    # def getIspJetSingle(self, atmValue):
 
     # def getIsp(self, atmValue):
     #     if self.countEngineModules() == 1:
