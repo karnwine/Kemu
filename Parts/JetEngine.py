@@ -6,8 +6,7 @@ class JetEngine(Engine):
     def __init__(self, directoryName, partDict, localizationDict):
         super().__init__(directoryName, partDict, localizationDict)
         self.maxThrust = self.getMaxThrustJet()
-        # self.ispAsl = self.getIspJet("1")
-        # self.ispVac = self.getIspJet("0")
+        self.isp = self.getIspJet()
 
     def getEngineModules(self):
         engineModules = []
@@ -61,12 +60,12 @@ class JetEngine(Engine):
                 value = PartParser.getValueFromKey("maxThrust", engineModule)
             maxThrust[key] = value
         return maxThrust
-    
-    # def getIspJetSingle(self, atmValue):
 
-    # def getIsp(self, atmValue):
-    #     if self.countEngineModules() == 1:
-    #         return self.getIspSingle(atmValue)
+    def getIspJet(self):
+        if self.countEngineModules() == 1:
+            return self.getIsp()
+        
+        return "poop"
 
     #     isp = {}
     #     atmLabel = "SeaLevel" if atmValue == "1" else "Vacuum"

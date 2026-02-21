@@ -17,9 +17,17 @@ class Engine(Part):
             value = value.split(" ")
             if value[0].strip() == atmValue:
                 return value[1].strip()
+
+    def checkForNoneValueInIsp(self, ispDict):
+        if ispDict["SeaLevel"] == None:
+            return ispDict["Vacuum"]
+        if ispDict["Vacuum"] == None:
+            return ispDict["SeaLevel"]
+        return ispDict
             
     def getIsp(self):
         isp = {}
         isp["SeaLevel"] = self.getIspValue("1")
         isp["Vacuum"] = self.getIspValue("0")
+        isp = self.checkForNoneValueInIsp(isp)
         return isp
