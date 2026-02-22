@@ -7,6 +7,7 @@ class Engine(Part):
         super().__init__(directoryName, partDict, localizationDict)
         self.maxThrust = self.getMaxThrust()
         self.isp = self.getIsp()
+        self.gimbal = self.getGimbal()
 
     def getMaxThrust(self):
         return PartParser.getValueFromKey("maxThrust", self.partDict)
@@ -30,3 +31,6 @@ class Engine(Part):
         isp["SeaLevel"] = self.getIspValue("1")
         isp["Vacuum"] = self.getIspValue("0")
         return self.checkForNoneValueInIsp(isp)
+
+    def getGimbal(self):
+        return PartParser.getValueFromKey("gimbalRange", self.partDict)

@@ -117,7 +117,6 @@ TechTreeModding.createCsvForJetEngineBalancing(nfaParts, techTierData)
 TechTreeModding.createCsvForJetEngineBalancing(stockParts, techTierData)
 
 # TechTreeModding.createCsvForTechTreePatch(nfaParts, techTierData)
-# TechTreeModding.createCsvForTechTreePatch(fftParts, techTierData)
 
 ### User modifies CSV here ###
 
