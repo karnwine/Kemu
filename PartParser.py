@@ -50,3 +50,35 @@ def getValueFromKey(keyName, partDict):
             result = getValueFromKey(keyName, value)
             if result is not None:
                 return result
+            
+def getAllModules(partDict):
+        modules = []
+        index = 2
+        first = True
+        
+        while True:
+            if first:
+                first = False
+                module = getValueFromKey("MODULE", partDict)
+                if module == None:
+                    break
+                modules.append(module)
+                continue
+
+            module = getValueFromKey(f"MODULE_{index}", partDict)
+            if module == None:
+                break
+
+            modules.append(module)
+            index += 1
+        return modules
+
+def getSpecificModules(partDict, searchTerm):
+        specificModules = []
+        modules = getAllModules(partDict)
+
+        for module in modules:
+            if searchTerm in module:
+                specificModules.append(module)
+
+        return specificModules

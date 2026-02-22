@@ -3,6 +3,7 @@ from pathlib import Path
 
 import CttPatchParser
 import LocalizationParser
+import PartCreator
 import PartParser
 import TechTreeModding
 
@@ -10,6 +11,7 @@ from Filepaths import Filepaths
 from Parts.Part import Part
 from Parts.Engine import Engine
 from Parts.JetEngine import JetEngine
+from Parts.SRB import SRB
 
 RED = "\033[91m"
 RESET = "\033[0m"
@@ -64,13 +66,6 @@ def getPartDicts(partCfgFilepaths):
 
     return partDicts
 
-def createPart(directoryName, partDict, localizationDict):
-    if PartParser.getValueFromKey("velCurve", partDict) != None:
-        return JetEngine(directoryName, partDict, localizationDict)
-    if PartParser.getValueFromKey("maxThrust", partDict) != None:
-        return Engine(directoryName, partDict, localizationDict)
-    return Part(directoryName, partDict, localizationDict)
-
 def getAllParts(directoryName):
     filepaths = Filepaths(gamedataPath, directoryName)
     localizationDict = LocalizationParser.getLocalizationDict(getLines(filepaths.localizationPath))
@@ -78,7 +73,7 @@ def getAllParts(directoryName):
     parts = []
 
     for partDict in partDicts:
-        part = createPart(directoryName, partDict, localizationDict)
+        part = PartCreator.createPart(directoryName, partDict, localizationDict)
         parts.append(part)
 
     if filepaths.cttPatchFilepath != Path():
@@ -94,27 +89,31 @@ gamedataPath = "/home/keith/kspTestingTmp/GameData"
 techTierData = getCsvData("kttTechTiers.csv")
 
 nfaParts = getAllParts("NearFutureAeronautics")
+nflvParts = getAllParts("NearFutureLaunchVehicles")
 fftParts = getAllParts("FarFutureTechnologies")
 stockParts = getAllParts("Squad/Parts")
 mhParts = getAllParts("SquadExpansion/MakingHistory/Parts")
 bgParts = getAllParts("SquadExpansion/Serenity/Parts")
 
-def printEnginesWithMoreThanOneEngineModule(parts):
+def printSomeEngineStuff(parts):
     for index, part in enumerate(parts):
-        if isinstance(part, Engine):
-            if part.countEngineModules() > 1:
-                print(f"[{index:03}] {part.title:<60}{part.countEngineModules()}")
-
-def printSomePartStuff(parts):
-    for index, part in enumerate(parts):
-        if isinstance(part, Engine):
+        if isinstance(part, SRB):
             print(f"[{index:03}] {part.title}")
             print(f"\tSize: {part.size}")
             print(f"\tMax Thrust: {part.maxThrust}")
             print(f"\tIsp: {part.isp}")
+            print(f"\tSolid Fuel: {part.solidFuel}")
 
-TechTreeModding.createCsvForJetEngineBalancing(nfaParts, techTierData)
-TechTreeModding.createCsvForJetEngineBalancing(stockParts, techTierData)
+
+
+# TechTreeModding.createCsvForJetEngineBalancing(nfaParts, techTierData)
+# TechTreeModding.createCsvForJetEngineBalancing(stockParts, techTierData)
+
+allParts = nfaParts + nflvParts + fftParts + stockParts + mhParts + bgParts
+printSomeEngineStuff(allParts)
+for part in stockParts:
+    if isinstance(part, SRB):
+        print("poop")
 
 # TechTreeModding.createCsvForTechTreePatch(nfaParts, techTierData)
 
