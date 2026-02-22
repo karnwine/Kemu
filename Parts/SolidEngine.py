@@ -8,7 +8,7 @@ class SolidEngine(Engine):
         self.solidFuel = self.getSolidFuel()
 
     def getSolidFuel(self):
-        resources = PartParser.getNestedDicts("RESOURCE", self.partDict)
+        resources = PartParser.getNodeDicts("RESOURCE", self.partDict)
         for resource in resources:
             if "SolidFuel" in resource.values():
                 return PartParser.getValueFromKey("amount", resource)

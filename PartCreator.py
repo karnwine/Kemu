@@ -11,11 +11,16 @@ def isJetEngine(partDict):
     return PartParser.getValueFromKey("velCurve", partDict) != None
 
 def isSolidEngine(partDict):
-    resources = PartParser.getNestedDicts("RESOURCE", partDict)
+    resources = PartParser.getNodeDicts("RESOURCE", partDict)
     for resource in resources:
         if "SolidFuel" in resource.values():
             return True
     return False
+
+# def isFuelTank(partDict):
+#     hasTankCategory = PartParser.getValueFromKey("category", partDict) == "FuelTank"
+#     # hasPropCategory = PartParser.getValueFromKey("category", partDict) == "Propulsion" and not isEngine(partDict)
+#     return hasTankCategory #or hasPropCategory
 
 def createPart(directoryName, partDict, localizationDict):
     if isJetEngine(partDict):
@@ -24,5 +29,7 @@ def createPart(directoryName, partDict, localizationDict):
         return SolidEngine(directoryName, partDict, localizationDict)
     if isEngine(partDict):
         return Engine(directoryName, partDict, localizationDict)
+    # if isFuelTank(partDict):
+    #     return FuelTank(directoryName, partDict, localizationDict)
     return Part(directoryName, partDict, localizationDict)
 

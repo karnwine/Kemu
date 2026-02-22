@@ -1,10 +1,10 @@
 import csv, sys
 from pathlib import Path
 
-import CttPatchParser
 import LocalizationParser
 import PartCreator
 import PartParser
+import PatchParser
 import TechTreeModding
 
 from Filepaths import Filepaths
@@ -73,29 +73,29 @@ def getAllParts(directoryName):
         parts.append(part)
 
     if filepaths.cttPatchFilepath != Path():
-        cttPatchDict = CttPatchParser.getCttPatchDict(getLines(filepaths.cttPatchFilepath))
+        cttPatchDict = PatchParser.getPatchDict(getLines(filepaths.cttPatchFilepath))
         parts = TechTreeModding.updatePartsForNewTech(parts, cttPatchDict)
 
     return parts
 
 # gamedataPath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Kerbal Space Program\\GameData"
 # gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
-gamedataPath = "/home/keith/kspTestingTmp/GameData"
+gamedataPath = "/home/keith/KSP Temp/GameData"
 
 techTierData = getCsvData("kttTechTiers.csv")
 
 nfaParts = getAllParts("NearFutureAeronautics")
 nflvParts = getAllParts("NearFutureLaunchVehicles")
+ceParts = getAllParts("CryoEngines")
+ctParts = getAllParts("CryoTanks")
 fftParts = getAllParts("FarFutureTechnologies")
 stockParts = getAllParts("Squad/Parts")
 mhParts = getAllParts("SquadExpansion/MakingHistory/Parts")
 bgParts = getAllParts("SquadExpansion/Serenity/Parts")
 
-allParts = nfaParts + nflvParts + fftParts + stockParts + mhParts + bgParts
-
-# TechTreeModding.createCsvForEngineBalancing(allParts, techTierData)
-TechTreeModding.createCsvForSolidEngineBalancing(stockParts, techTierData)
-# TechTreeModding.createCsvForJetEngineBalancing(allParts, techTierData)
+cttPatchDict = PatchParser.getPatchDict(getLines("testPatch.cfg"))
+for key, value in cttPatchDict.items():
+    print(f"{key}: {value}\n")
 
 
 # TechTreeModding.createCsvForTechTreePatch(nfaParts, techTierData)

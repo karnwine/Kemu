@@ -1,4 +1,4 @@
-def parseLine(line):
+def parseKeyValueLine(line):
     key = line.split("=")[0].strip()
     value = line.split("=")[1].strip()
     value = value.split("//")[0].strip()
@@ -23,7 +23,7 @@ def getPartDictRecursively(lines):
         elif "}" in line:
             break
         elif "=" in line:
-            key, value = parseLine(line)
+            key, value = parseKeyValueLine(line)
             key = getKeyName(key, partDict)
             partDict[key] = value
         else:
@@ -51,30 +51,30 @@ def getValueFromKey(keyName, partDict):
             if result is not None:
                 return result
             
-def getNestedDicts(nestName, partDict):
-        nestedDicts = []
+def getNodeDicts(nodeName, partDict):
+        nodeDicts = []
         index = 2
         first = True
         
         while True:
             if first:
                 first = False
-                nestedDict = getValueFromKey(nestName, partDict)
-                if nestedDict == None:
+                nodeDict = getValueFromKey(nodeName, partDict)
+                if nodeDict == None:
                     break
-                nestedDicts.append(nestedDict)
+                nodeDicts.append(nodeDict)
                 continue
 
-            nestedDict = getValueFromKey(f"{nestName}_{index}", partDict)
-            if nestedDict == None:
+            nodeDict = getValueFromKey(f"{nodeName}_{index}", partDict)
+            if nodeDict == None:
                 break
 
-            nestedDicts.append(nestedDict)
+            nodeDicts.append(nodeDict)
             index += 1
-        return nestedDicts
+        return nodeDicts
 
 def getAllModules(partDict):
-    return getNestedDicts("MODULE", partDict)
+    return getNodeDicts("MODULE", partDict)
 
 def getSpecificModules(partDict, searchTerm):
         specificModules = []
@@ -85,3 +85,4 @@ def getSpecificModules(partDict, searchTerm):
                 specificModules.append(module)
 
         return specificModules
+
