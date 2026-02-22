@@ -61,17 +61,6 @@ def getPartDicts(partCfgFilepaths):
 
     return partDicts
 
-def getPatchDicts(patchCfgFilepaths):
-    patchDicts = []
-
-    for filepath in patchCfgFilepaths:
-        patchDict = CfgParser.getPatchDict(getLines(filepath))
-        patchDicts.append(patchDict)
-
-        patchDict['PATH'] = filepath
-
-    return patchDicts
-
 def getAllParts(directoryName):
     filepaths = Filepaths(gamedataPath, directoryName)
     localizationDict = LocalizationParser.getLocalizationDict(getLines(filepaths.localizationPath))
@@ -88,6 +77,20 @@ def getAllParts(directoryName):
 
     return parts
 
+def getPatches(directoryName):
+    patchCfgFilepaths = Filepaths(gamedataPath, directoryName).patchCfgFilepaths
+    for index, path in enumerate(patchCfgFilepaths):
+        path = str(path)
+        trimLocation = path.find("Patch")
+        path = path[trimLocation:]
+        print(f"{index:02} {path}")
+    return patchCfgFilepaths
+
+def applyPatch(patchList, patchNumber):
+    patch = patchList[patchNumber]
+    patchDict = CfgParser.getPatchDict(getLines(patch))
+    return patchDict
+
 # gamedataPath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Kerbal Space Program\\GameData"
 # gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
 gamedataPath = "/home/keith/KSP Temp/GameData"
@@ -103,15 +106,8 @@ stockParts = getAllParts("Squad/Parts")
 mhParts = getAllParts("SquadExpansion/MakingHistory/Parts")
 bgParts = getAllParts("SquadExpansion/Serenity/Parts")
 
-patchCfgs = Filepaths(gamedataPath, "CryoEngines").patchCfgFilepaths
-patchDicts = getPatchDicts(patchCfgs)
-
-for d in patchDicts:
-    for key in d.keys():
-        print(key)
-
-
-
+cePatches = getPatches("CryoEngines")
+print(applyPatch(cePatches, 1))
 
 # TechTreeModding.createCsvForTechTreePatch(nfaParts, techTierData)
 
