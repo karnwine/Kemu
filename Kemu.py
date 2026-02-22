@@ -61,6 +61,17 @@ def getPartDicts(partCfgFilepaths):
 
     return partDicts
 
+def getPatchDicts(patchCfgFilepaths):
+    patchDicts = []
+
+    for filepath in patchCfgFilepaths:
+        patchDict = CfgParser.getPatchDict(getLines(filepath))
+        patchDicts.append(patchDict)
+
+        patchDict['PATH'] = filepath
+
+    return patchDicts
+
 def getAllParts(directoryName):
     filepaths = Filepaths(gamedataPath, directoryName)
     localizationDict = LocalizationParser.getLocalizationDict(getLines(filepaths.localizationPath))
@@ -92,9 +103,14 @@ stockParts = getAllParts("Squad/Parts")
 mhParts = getAllParts("SquadExpansion/MakingHistory/Parts")
 bgParts = getAllParts("SquadExpansion/Serenity/Parts")
 
-patchDict = CfgParser.getPatchDict(getLines("testPatch.cfg"))
+patchCfgs = Filepaths(gamedataPath, "CryoEngines").patchCfgFilepaths
+patchDicts = getPatchDicts(patchCfgs)
 
-print(bgParts[0].title)
+for d in patchDicts:
+    for key in d.keys():
+        print(key)
+
+
 
 
 # TechTreeModding.createCsvForTechTreePatch(nfaParts, techTierData)

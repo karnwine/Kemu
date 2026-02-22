@@ -8,6 +8,7 @@ class Filepaths:
     cttPatchFilepath = Path()
     cfgFilepaths = []
     partCfgFilepaths = []
+    patchCfgFilepaths = []
 
     def __init__(self, gamedataPath, directoryName):
         self.modPath = self.getModPath(gamedataPath, directoryName)
@@ -15,6 +16,7 @@ class Filepaths:
         self.cfgFilepaths = self.getCfgFilepaths(self.modPath)
         self.cttPatchFilepath = self.getCttPatchFilepath(directoryName, self.cfgFilepaths)
         self.partCfgFilepaths = self.getPartCfgFilepaths(self.cfgFilepaths)
+        self.patchCfgFilepaths = self.getPatchCfgFilepaths(self.cfgFilepaths)
 
     def getModPath(self, gamedataPath, directoryName):
         modPath = Path(gamedataPath) / Path(directoryName)
@@ -64,3 +66,12 @@ class Filepaths:
             if "parts" in checkedFilepath:
                 partCfgFilepaths.append(Path(filepath))
         return partCfgFilepaths
+    
+    def getPatchCfgFilepaths(self, cfgFilepaths):
+        patchCfgFilepaths = []
+        for filepath in cfgFilepaths:
+            checkedFilepath = filepath.lower()
+            checkedFilepath = "".join(checkedFilepath.split())
+            if "patch" in checkedFilepath:
+                patchCfgFilepaths.append(Path(filepath))
+        return patchCfgFilepaths
