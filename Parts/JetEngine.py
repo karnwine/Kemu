@@ -1,4 +1,4 @@
-import PartParser
+import CfgParser
 from Parts.Engine import Engine
 
 class JetEngine(Engine):
@@ -9,7 +9,7 @@ class JetEngine(Engine):
         self.isp = self.getIspJet()
 
     def getEngineModules(self):
-        return PartParser.getSpecificModules(self.partDict, "maxThrust")
+        return CfgParser.getSpecificModules(self.partDict, "maxThrust")
 
     def getEngineModuleId(self, engineModule):
         for key, value in engineModule.items():
@@ -23,7 +23,7 @@ class JetEngine(Engine):
         velCurveThrustMult = {}
         mach = ""
         maxMult = 0
-        velCurve = PartParser.getValueFromKey("velCurve", engineModule)
+        velCurve = CfgParser.getValueFromKey("velCurve", engineModule)
 
         for value in velCurve.values():
             mult = float(value.split(" ")[1].strip())
@@ -39,7 +39,7 @@ class JetEngine(Engine):
         engineModule = self.getEngineModules()[0]
         velCurveThrustMult = self.getMaxVelCurveThrustMult(engineModule)
         velCurveThrustMult = list(velCurveThrustMult.values())[0]
-        maxThrust = float(PartParser.getValueFromKey("maxThrust", engineModule))
+        maxThrust = float(CfgParser.getValueFromKey("maxThrust", engineModule))
         maxThrust *= velCurveThrustMult
         maxThrust = str(int(maxThrust))
         return maxThrust
@@ -55,7 +55,7 @@ class JetEngine(Engine):
             if "velCurve" in engineModule:
                 value = self.getMaxThrustJetSingle()
             else:
-                value = PartParser.getValueFromKey("maxThrust", engineModule)
+                value = CfgParser.getValueFromKey("maxThrust", engineModule)
             maxThrust[key] = value
         return maxThrust
 

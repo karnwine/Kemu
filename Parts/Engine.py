@@ -1,4 +1,4 @@
-import PartParser
+import CfgParser
 from Parts.Part import Part
 
 class Engine(Part):
@@ -10,10 +10,10 @@ class Engine(Part):
         self.gimbal = self.getGimbal()
 
     def getMaxThrust(self):
-        return PartParser.getValueFromKey("maxThrust", self.partDict)
+        return CfgParser.getValueFromKey("maxThrust", self.partDict)
 
     def getIspValue(self, atmValue):
-        ispCurve = PartParser.getValueFromKey("atmosphereCurve", self.partDict)
+        ispCurve = CfgParser.getValueFromKey("atmosphereCurve", self.partDict)
         for value in ispCurve.values():
             value = value.split(" ")
             if value[0].strip() == atmValue:
@@ -33,4 +33,4 @@ class Engine(Part):
         return self.checkForNoneValueInIsp(isp)
 
     def getGimbal(self):
-        return PartParser.getValueFromKey("gimbalRange", self.partDict)
+        return CfgParser.getValueFromKey("gimbalRange", self.partDict)

@@ -1,5 +1,5 @@
+import CfgParser
 import LocalizationParser
-import PartParser
 
 class Part:
 
@@ -24,7 +24,7 @@ class Part:
         return directoryName
 
     def getTitle(self, localizationDict):
-        title = PartParser.getValueFromKey("title", self.partDict)
+        title = CfgParser.getValueFromKey("title", self.partDict)
         title = LocalizationParser.lookupLocalization(title, localizationDict)
         return title
     
@@ -47,7 +47,7 @@ class Part:
                 return size
     
     def getSize(self):
-        size = PartParser.getValueFromKey("bulkheadProfiles", self.partDict)
+        size = CfgParser.getValueFromKey("bulkheadProfiles", self.partDict)
         if size == None:
             return "bulkheadProfile(s) not found"
         size = size.split(",")
@@ -63,7 +63,7 @@ class Part:
         return convertedSize
 
     def getPartStats(self):
-        self.name = PartParser.getValueFromKey("name", self.partDict)
-        self.category = PartParser.getValueFromKey("category", self.partDict)
-        self.tech = PartParser.getValueFromKey("TechRequired", self.partDict)
-        self.cost = PartParser.getValueFromKey("cost", self.partDict)
+        self.name = CfgParser.getValueFromKey("name", self.partDict)
+        self.category = CfgParser.getValueFromKey("category", self.partDict)
+        self.tech = CfgParser.getValueFromKey("TechRequired", self.partDict)
+        self.cost = CfgParser.getValueFromKey("cost", self.partDict)

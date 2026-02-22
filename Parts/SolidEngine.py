@@ -1,4 +1,4 @@
-import PartParser
+import CfgParser
 from Parts.Engine import Engine
 
 class SolidEngine(Engine):
@@ -8,8 +8,8 @@ class SolidEngine(Engine):
         self.solidFuel = self.getSolidFuel()
 
     def getSolidFuel(self):
-        resources = PartParser.getNodeDicts("RESOURCE", self.partDict)
+        resources = CfgParser.getNodeDicts("RESOURCE", self.partDict)
         for resource in resources:
             if "SolidFuel" in resource.values():
-                return PartParser.getValueFromKey("amount", resource)
+                return CfgParser.getValueFromKey("amount", resource)
         return "SolidFuel Not Found"

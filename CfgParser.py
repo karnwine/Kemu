@@ -1,49 +1,56 @@
 def parseKeyValueLine(line):
     key = line.split("=")[0].strip()
+    if "@" in key:
+        key = key.split("@")[1].strip()
     value = line.split("=")[1].strip()
     value = value.split("//")[0].strip()
     return key, value
 
-def getKeyName(keyName, partDict):
-    if keyName not in partDict:
+def getKeyName(keyName, cfgDict):
+    if keyName not in cfgDict:
         return keyName
-    keyCount = len([key for key in partDict.keys() if key.startswith(keyName)]) + 1
+    keyCount = len([key for key in cfgDict.keys() if key.startswith(keyName)]) + 1
     return f"{keyName}_{keyCount}"
 
-def getPartDictRecursively(lines):
-    partDict = {}
+def getCfgDictRecursively(lines):
+    cfgDict = {}
     lastPotentialNodeName = ""
     for line in lines:
-        if line.startswith("//") or line.strip() == "":
+        if line.startswith("//") or line.startswith("!") or line.strip() == "":
             continue
         elif "{" in line:
-            node = getPartDictRecursively(lines)
-            nodeName = getKeyName(lastPotentialNodeName, partDict)
-            partDict[nodeName] = node
+            nodeName = getKeyName(lastPotentialNodeName, cfgDict)
+            node = getCfgDictRecursively(lines)
+            cfgDict[nodeName] = node
         elif "}" in line:
             break
         elif "=" in line:
             key, value = parseKeyValueLine(line)
-            key = getKeyName(key, partDict)
-            partDict[key] = value
+            key = getKeyName(key, cfgDict)
+            cfgDict[key] = value
         else:
             lastPotentialNodeName = line.strip()
-    return partDict
+    return cfgDict
 
-def unwrapPartDictTopLevel(partDict):
-    topLevelPartKey = [k for k in partDict.keys()][0]
+def unwrapPartDictTopLevel(cfgDict):
+    topLevelPartKey = [k for k in cfgDict.keys()][0]
     if "PART" not in topLevelPartKey:
         return {}
-    return partDict[topLevelPartKey]
+    return cfgDict[topLevelPartKey]
 
 def getPartDict(lines):
     linesGenerator = (line for line in lines)
-    partDict = getPartDictRecursively(linesGenerator)
+    partDict = getCfgDictRecursively(linesGenerator)
     partDict = unwrapPartDictTopLevel(partDict)
     return partDict
 
-def getValueFromKey(keyName, partDict):
-    for key, value in partDict.items():
+def getPatchDict(lines):
+    linesGenerator = (line for line in lines)
+    patchDict = getCfgDictRecursively(linesGenerator)
+    return patchDict
+
+def getValueFromKey(keyName, cfgDict):
+    for key, value in cfgDict.items():
         if key == keyName:
             return value
         elif isinstance(value, dict):
@@ -51,7 +58,7 @@ def getValueFromKey(keyName, partDict):
             if result is not None:
                 return result
             
-def getNodeDicts(nodeName, partDict):
+def getNodeDicts(nodeName, cfgDict):
         nodeDicts = []
         index = 2
         first = True
@@ -59,13 +66,13 @@ def getNodeDicts(nodeName, partDict):
         while True:
             if first:
                 first = False
-                nodeDict = getValueFromKey(nodeName, partDict)
+                nodeDict = getValueFromKey(nodeName, cfgDict)
                 if nodeDict == None:
                     break
                 nodeDicts.append(nodeDict)
                 continue
 
-            nodeDict = getValueFromKey(f"{nodeName}_{index}", partDict)
+            nodeDict = getValueFromKey(f"{nodeName}_{index}", cfgDict)
             if nodeDict == None:
                 break
 
@@ -73,12 +80,12 @@ def getNodeDicts(nodeName, partDict):
             index += 1
         return nodeDicts
 
-def getAllModules(partDict):
-    return getNodeDicts("MODULE", partDict)
+def getAllModules(cfgDict):
+    return getNodeDicts("MODULE", cfgDict)
 
-def getSpecificModules(partDict, searchTerm):
+def getSpecificModules(cfgDict, searchTerm):
         specificModules = []
-        modules = getAllModules(partDict)
+        modules = getAllModules(cfgDict)
 
         for module in modules:
             if searchTerm in module:

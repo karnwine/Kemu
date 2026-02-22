@@ -1,17 +1,17 @@
-import PartParser
+import CfgParser
 from Parts.Part import Part
 from Parts.Engine import Engine
 from Parts.JetEngine import JetEngine
 from Parts.SolidEngine import SolidEngine
 
 def isEngine(partDict):
-    return PartParser.getValueFromKey("maxThrust", partDict) != None
+    return CfgParser.getValueFromKey("maxThrust", partDict) != None
 
 def isJetEngine(partDict):
-    return PartParser.getValueFromKey("velCurve", partDict) != None
+    return CfgParser.getValueFromKey("velCurve", partDict) != None
 
 def isSolidEngine(partDict):
-    resources = PartParser.getNodeDicts("RESOURCE", partDict)
+    resources = CfgParser.getNodeDicts("RESOURCE", partDict)
     for resource in resources:
         if "SolidFuel" in resource.values():
             return True

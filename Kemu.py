@@ -1,10 +1,9 @@
 import csv, sys
 from pathlib import Path
 
+import CfgParser
 import LocalizationParser
 import PartCreator
-import PartParser
-import PatchParser
 import TechTreeModding
 
 from Filepaths import Filepaths
@@ -43,15 +42,15 @@ def getPartDicts(partCfgFilepaths):
     partDicts = []
 
     for filepath in partCfgFilepaths:
-        partDict = PartParser.getPartDict(getLines(filepath))
+        partDict = CfgParser.getPartDict(getLines(filepath))
         if partDict == {}:
             continue
-        if PartParser.getValueFromKey("TechRequired", partDict) == "Unresearcheable":
+        if CfgParser.getValueFromKey("TechRequired", partDict) == "Unresearcheable":
             continue
         if partDict.get("module") == None:
             continue
 
-        val = PartParser.getValueFromKey("TechHidden", partDict)
+        val = CfgParser.getValueFromKey("TechHidden", partDict)
         if val and val.lower() == "true":
             continue
 
@@ -73,7 +72,7 @@ def getAllParts(directoryName):
         parts.append(part)
 
     if filepaths.cttPatchFilepath != Path():
-        cttPatchDict = PatchParser.getPatchDict(getLines(filepaths.cttPatchFilepath))
+        cttPatchDict = CfgParser.getPatchDict(getLines(filepaths.cttPatchFilepath))
         parts = TechTreeModding.updatePartsForNewTech(parts, cttPatchDict)
 
     return parts
@@ -93,9 +92,9 @@ stockParts = getAllParts("Squad/Parts")
 mhParts = getAllParts("SquadExpansion/MakingHistory/Parts")
 bgParts = getAllParts("SquadExpansion/Serenity/Parts")
 
-cttPatchDict = PatchParser.getPatchDict(getLines("testPatch.cfg"))
-for key, value in cttPatchDict.items():
-    print(f"{key}: {value}\n")
+patchDict = CfgParser.getPatchDict(getLines("testPatch.cfg"))
+
+print(bgParts[0].title)
 
 
 # TechTreeModding.createCsvForTechTreePatch(nfaParts, techTierData)
