@@ -51,27 +51,30 @@ def getValueFromKey(keyName, partDict):
             if result is not None:
                 return result
             
-def getAllModules(partDict):
-        modules = []
+def getNestedDicts(nestName, partDict):
+        nestedDicts = []
         index = 2
         first = True
         
         while True:
             if first:
                 first = False
-                module = getValueFromKey("MODULE", partDict)
-                if module == None:
+                nestedDict = getValueFromKey(nestName, partDict)
+                if nestedDict == None:
                     break
-                modules.append(module)
+                nestedDicts.append(nestedDict)
                 continue
 
-            module = getValueFromKey(f"MODULE_{index}", partDict)
-            if module == None:
+            nestedDict = getValueFromKey(f"{nestName}_{index}", partDict)
+            if nestedDict == None:
                 break
 
-            modules.append(module)
+            nestedDicts.append(nestedDict)
             index += 1
-        return modules
+        return nestedDicts
+
+def getAllModules(partDict):
+    return getNestedDicts("MODULE", partDict)
 
 def getSpecificModules(partDict, searchTerm):
         specificModules = []

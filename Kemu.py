@@ -8,10 +8,6 @@ import PartParser
 import TechTreeModding
 
 from Filepaths import Filepaths
-from Parts.Part import Part
-from Parts.Engine import Engine
-from Parts.JetEngine import JetEngine
-from Parts.SRB import SRB
 
 RED = "\033[91m"
 RESET = "\033[0m"
@@ -95,25 +91,12 @@ stockParts = getAllParts("Squad/Parts")
 mhParts = getAllParts("SquadExpansion/MakingHistory/Parts")
 bgParts = getAllParts("SquadExpansion/Serenity/Parts")
 
-def printSomeEngineStuff(parts):
-    for index, part in enumerate(parts):
-        if isinstance(part, SRB):
-            print(f"[{index:03}] {part.title}")
-            print(f"\tSize: {part.size}")
-            print(f"\tMax Thrust: {part.maxThrust}")
-            print(f"\tIsp: {part.isp}")
-            print(f"\tSolid Fuel: {part.solidFuel}")
-
-
-
-# TechTreeModding.createCsvForJetEngineBalancing(nfaParts, techTierData)
-# TechTreeModding.createCsvForJetEngineBalancing(stockParts, techTierData)
-
 allParts = nfaParts + nflvParts + fftParts + stockParts + mhParts + bgParts
-printSomeEngineStuff(allParts)
-for part in stockParts:
-    if isinstance(part, SRB):
-        print("poop")
+
+# TechTreeModding.createCsvForEngineBalancing(allParts, techTierData)
+TechTreeModding.createCsvForSolidEngineBalancing(stockParts, techTierData)
+# TechTreeModding.createCsvForJetEngineBalancing(allParts, techTierData)
+
 
 # TechTreeModding.createCsvForTechTreePatch(nfaParts, techTierData)
 

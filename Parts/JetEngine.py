@@ -8,13 +8,16 @@ class JetEngine(Engine):
         self.maxThrust = self.getMaxThrustJet()
         self.isp = self.getIspJet()
 
+    def getEngineModules(self):
+        return PartParser.getSpecificModules(self.partDict, "maxThrust")
+
     def getEngineModuleId(self, engineModule):
         for key, value in engineModule.items():
             if key == "engineID":
                 return value
 
     def countEngineModules(self):
-        return len(PartParser.getSpecificModules(self.partDict, "maxThrust"))
+        return len(self.getEngineModules())
 
     def getMaxVelCurveThrustMult(self, engineModule):
         velCurveThrustMult = {}
@@ -33,7 +36,7 @@ class JetEngine(Engine):
         return velCurveThrustMult
 
     def getMaxThrustJetSingle(self):
-        engineModule = PartParser.getSpecificModules(self.partDict, "maxThrust")[0]
+        engineModule = self.getEngineModules()[0]
         velCurveThrustMult = self.getMaxVelCurveThrustMult(engineModule)
         velCurveThrustMult = list(velCurveThrustMult.values())[0]
         maxThrust = float(PartParser.getValueFromKey("maxThrust", engineModule))
@@ -46,7 +49,7 @@ class JetEngine(Engine):
             return self.getMaxThrustJetSingle()
         
         maxThrust = {}
-        for engineModule in PartParser.getSpecificModules(self.partDict, "maxThrust"):
+        for engineModule in self.getEngineModules():
             engineId = self.getEngineModuleId(engineModule)
             key = f"MaxThrust_{engineId}"
             if "velCurve" in engineModule:
@@ -72,7 +75,7 @@ class JetEngine(Engine):
             return self.getIsp()
         
         isp = {}
-        for engineModule in PartParser.getSpecificModules(self.partDict, "maxThrust"):
+        for engineModule in self.getEngineModules():
             engineId = self.getEngineModuleId(engineModule)
             key = f"Isp_{engineId}"
             value = self.getIsp()
