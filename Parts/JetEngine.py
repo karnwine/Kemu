@@ -61,6 +61,17 @@ class JetEngine(Engine):
             maxThrust[key] = value
         return maxThrust
 
+    def checkForDuplicateIspValues(self, ispDict):
+        ispValues = list(ispDict.values())
+        firstValue = ispValues[0]
+        hasDuplicateValues = True
+        for value in ispValues:
+            if value != firstValue:
+                hasDuplicateValues = False
+        if hasDuplicateValues:
+            return firstValue
+        return ispDict
+
     def getIspJet(self):
         if self.countEngineModules() == 1:
             return self.getIsp()
@@ -71,4 +82,5 @@ class JetEngine(Engine):
             key = f"Isp_{engineId}"
             value = self.getIsp()
             isp[key] = value
+        isp = self.checkForDuplicateIspValues(isp)
         return isp

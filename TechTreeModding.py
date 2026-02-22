@@ -58,8 +58,8 @@ def createCsvForRocketEngineBalancing(parts, techTierData):
     rows = generateRocketEngineBalancingCsvData(parts, techTierData)
     createCsv(filename, columnNames, rows)
 
-def isMultimode(part):
-    return isinstance(part.maxThrust, dict)
+def isMultimode(engine):
+    return isinstance(engine.maxThrust, dict)
 
 def generateJetEngineBalancingCsvData(parts, techTierData):
     csvData = []
