@@ -1,4 +1,4 @@
-def parseKeyValueLine(line):
+def parseLine(line):
     key = line.split("=")[0].strip()
     if "@" in key:
         key = key.split("@")[1].strip()
@@ -25,7 +25,7 @@ def getCfgDictRecursively(lines):
         elif "}" in line:
             break
         elif "=" in line:
-            key, value = parseKeyValueLine(line)
+            key, value = parseLine(line)
             key = getKeyName(key, cfgDict)
             cfgDict[key] = value
         else:
@@ -41,13 +41,11 @@ def unwrapPartDictTopLevel(cfgDict):
 def getPartDict(lines):
     linesGenerator = (line for line in lines)
     partDict = getCfgDictRecursively(linesGenerator)
-    partDict = unwrapPartDictTopLevel(partDict)
-    return partDict
+    return unwrapPartDictTopLevel(partDict)
 
 def getPatchDict(lines):
     linesGenerator = (line for line in lines)
-    patchDict = getCfgDictRecursively(linesGenerator)
-    return patchDict
+    return getCfgDictRecursively(linesGenerator)
 
 def getValueFromKey(keyName, cfgDict):
     for key, value in cfgDict.items():
@@ -57,12 +55,11 @@ def getValueFromKey(keyName, cfgDict):
             result = getValueFromKey(keyName, value)
             if result is not None:
                 return result
-            
+
 def getNodeDicts(nodeName, cfgDict):
         nodeDicts = []
         index = 2
         first = True
-        
         while True:
             if first:
                 first = False
@@ -71,11 +68,9 @@ def getNodeDicts(nodeName, cfgDict):
                     break
                 nodeDicts.append(nodeDict)
                 continue
-
             nodeDict = getValueFromKey(f"{nodeName}_{index}", cfgDict)
             if nodeDict == None:
                 break
-
             nodeDicts.append(nodeDict)
             index += 1
         return nodeDicts
@@ -86,10 +81,8 @@ def getAllModules(cfgDict):
 def getSpecificModules(cfgDict, searchTerm):
         specificModules = []
         modules = getAllModules(cfgDict)
-
         for module in modules:
             if searchTerm in module:
                 specificModules.append(module)
-
         return specificModules
 

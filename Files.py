@@ -1,14 +1,14 @@
-import os, sys
+import csv, os, sys
 from pathlib import Path
 
-class Filepaths:
+class Files:
 
-    modPath = Path()
-    localizationPath = Path()
-    cttPatchFilepath = Path()
+    modPath = None
+    localizationPath = None
+    cttPatchFilepath = None
     cfgFilepaths = []
     partCfgFilepaths = []
-    patchCfgFilepaths = []
+    partPatchFilepaths = []
 
     def __init__(self, gamedataPath, directoryName):
         self.modPath = self.getModPath(gamedataPath, directoryName)
@@ -16,7 +16,24 @@ class Filepaths:
         self.cfgFilepaths = self.getCfgFilepaths(self.modPath)
         self.cttPatchFilepath = self.getCttPatchFilepath(directoryName, self.cfgFilepaths)
         self.partCfgFilepaths = self.getPartCfgFilepaths(self.cfgFilepaths)
-        self.patchCfgFilepaths = self.getPatchCfgFilepaths(self.cfgFilepaths)
+        self.partPatchFilepaths = self.getPartPatchFilepaths(self.cfgFilepaths)
+
+    @staticmethod
+    def getLines(filepath):
+        lines = []
+        with open(filepath, "r", encoding="UTF-8") as currentFile:
+            for line in currentFile.readlines():
+                lines.append(line.strip())
+        return lines
+
+    @staticmethod
+    def getCsvData(filepath):
+        csvData = []
+        with open(filepath) as csvFile:
+            reader = csv.reader(csvFile)
+            for row in reader:
+                csvData.append(row)
+        return csvData
 
     def getModPath(self, gamedataPath, directoryName):
         modPath = Path(gamedataPath) / Path(directoryName)
@@ -51,7 +68,7 @@ class Filepaths:
     def getCttPatchFilepath(self, directoryName, cfgFilepaths):
         directoryName = directoryName.lower()
         if "squad" in directoryName or "squadexpansion" in directoryName:
-            return Path()
+            return None
         for filepath in cfgFilepaths:
             checkedFilepath = filepath.lower()
             checkedFilepath = "".join(checkedFilepath.split())
@@ -66,12 +83,13 @@ class Filepaths:
             if "parts" in checkedFilepath:
                 partCfgFilepaths.append(Path(filepath))
         return partCfgFilepaths
-    
-    def getPatchCfgFilepaths(self, cfgFilepaths):
+
+    def getPartPatchFilepaths(self, cfgFilepaths):
         patchCfgFilepaths = []
         for filepath in cfgFilepaths:
-            checkedFilepath = filepath.lower()
-            checkedFilepath = "".join(checkedFilepath.split())
-            if "patch" in checkedFilepath:
-                patchCfgFilepaths.append(Path(filepath))
+            lines = Files.getLines(filepath)
+            for line in lines:
+                if "@PART" in line:
+                    patchCfgFilepaths.append(Path(filepath))
+                    break
         return patchCfgFilepaths

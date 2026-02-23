@@ -1,48 +1,16 @@
-import csv, sys
-from pathlib import Path
-
 import CfgParser
 import LocalizationParser
 import PartCreator
+from Parts.FuelTank import FuelTank
 import TechTreeModding
 
-from Filepaths import Filepaths
-
-RED = "\033[91m"
-RESET = "\033[0m"
-
-def getLines(filepath):
-    lines = []
-
-    try:
-        with open(filepath, "r", encoding="UTF-8") as currentFile:
-            for line in currentFile.readlines():
-                lines.append(line.strip())
-    except FileNotFoundError:
-        print(f"{RED}ERROR: [{filepath}] not found.{RESET}")
-    except UnicodeDecodeError:
-        print(f"{RED}ERROR: Invalid file format.{RESET}")
-
-    return lines
-
-def getCsvData(filepath):
-    if not Path(filepath).exists():
-        print(f"{RED}ERROR: File \"{filepath}\" not found.{RESET}")
-        sys.exit()
-
-    csvData = []
-    with open(filepath) as csvFile:
-        reader = csv.reader(csvFile)
-        for row in reader:
-            csvData.append(row)
-
-    return csvData
+from Files import Files
 
 def getPartDicts(partCfgFilepaths):
     partDicts = []
-
     for filepath in partCfgFilepaths:
-        partDict = CfgParser.getPartDict(getLines(filepath))
+        partLines = Files.getLines(filepath)
+        partDict = CfgParser.getPartDict(partLines)
         if partDict == {}:
             continue
         if CfgParser.getValueFromKey("TechRequired", partDict) == "Unresearcheable":
@@ -62,8 +30,9 @@ def getPartDicts(partCfgFilepaths):
     return partDicts
 
 def getAllParts(directoryName):
-    filepaths = Filepaths(gamedataPath, directoryName)
-    localizationDict = LocalizationParser.getLocalizationDict(getLines(filepaths.localizationPath))
+    filepaths = Files(gamedataPath, directoryName)
+    localizationLines = Files.getLines(filepaths.localizationPath)
+    localizationDict = LocalizationParser.getLocalizationDict(localizationLines)
     partDicts = getPartDicts(filepaths.partCfgFilepaths)
     parts = []
 
@@ -71,31 +40,18 @@ def getAllParts(directoryName):
         part = PartCreator.createPart(directoryName, partDict, localizationDict)
         parts.append(part)
 
-    if filepaths.cttPatchFilepath != Path():
-        cttPatchDict = CfgParser.getPatchDict(getLines(filepaths.cttPatchFilepath))
+    if filepaths.cttPatchFilepath != None:
+        cttPatchLines = Files.getLines(filepaths.cttPatchFilepath)
+        cttPatchDict = CfgParser.getPatchDict(cttPatchLines)
         parts = TechTreeModding.updatePartsForNewTech(parts, cttPatchDict)
 
     return parts
 
-def getPatches(directoryName):
-    patchCfgFilepaths = Filepaths(gamedataPath, directoryName).patchCfgFilepaths
-    for index, path in enumerate(patchCfgFilepaths):
-        path = str(path)
-        trimLocation = path.find("Patch")
-        path = path[trimLocation:]
-        print(f"{index:02} {path}")
-    return patchCfgFilepaths
-
-def applyPatch(patchList, patchNumber):
-    patch = patchList[patchNumber]
-    patchDict = CfgParser.getPatchDict(getLines(patch))
-    return patchDict
-
 # gamedataPath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Kerbal Space Program\\GameData"
-# gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
-gamedataPath = "/home/keith/KSP Temp/GameData"
+gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
+# gamedataPath = "/home/keith/KSP Temp/GameData"
 
-techTierData = getCsvData("kttTechTiers.csv")
+techTierData = Files.getCsvData("kttTechTiers.csv")
 
 nfaParts = getAllParts("NearFutureAeronautics")
 nflvParts = getAllParts("NearFutureLaunchVehicles")
@@ -105,16 +61,9 @@ fftParts = getAllParts("FarFutureTechnologies")
 stockParts = getAllParts("Squad/Parts")
 mhParts = getAllParts("SquadExpansion/MakingHistory/Parts")
 bgParts = getAllParts("SquadExpansion/Serenity/Parts")
+allParts = nfaParts + nflvParts + ceParts + ctParts + fftParts + stockParts + mhParts + bgParts
 
-cePatches = getPatches("CryoEngines")
-print(applyPatch(cePatches, 1))
-
-# TechTreeModding.createCsvForTechTreePatch(nfaParts, techTierData)
-
-### User modifies CSV here ###
-
-# nfaNewTechDict = TechTreeModding.getNewTechDictFromCsv("ForTechTreePatch_NearFutureAeronautics.csv")
-# nfaParts = TechTreeModding.updatePartsForNewTech(nfaParts, nfaNewTechDict)
-# TechTreeModding.createTechTreePatch(nfaParts, techTierData)
-
-
+# testLines = Files.getLines("testPatch.cfg")
+# testPatchDict = CfgParser.getPatchDict(testLines)
+# from pprint import pp
+# pp(testPatchDict)
