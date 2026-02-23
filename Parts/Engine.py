@@ -12,8 +12,10 @@ class Engine(Part):
     def getMaxThrust(self):
         return CfgParser.getValueFromKey("maxThrust", self.partDict)
 
-    def getIspValue(self, atmValue):
-        ispCurve = CfgParser.getValueFromKey("atmosphereCurve", self.partDict)
+    def getIspCurve(self):
+        return CfgParser.getValueFromKey("atmosphereCurve", self.partDict)
+
+    def getIspValue(self, ispCurve, atmValue):
         for value in ispCurve.values():
             value = value.split(" ")
             if value[0].strip() == atmValue:
@@ -25,12 +27,19 @@ class Engine(Part):
         if ispDict["Vacuum"] == None:
             return ispDict["SeaLevel"]
         return ispDict
-            
+
     def getIsp(self):
         isp = {}
-        isp["SeaLevel"] = self.getIspValue("1")
-        isp["Vacuum"] = self.getIspValue("0")
+        ispCurve = self.getIspCurve()
+        isp["SeaLevel"] = self.getIspValue(ispCurve, "1")
+        isp["Vacuum"] = self.getIspValue(ispCurve, "0")
         return self.checkForNoneValueInIsp(isp)
+
+    def updateIsp(self, newIspCurve):
+        newIsp = {}
+        newIsp["SeaLevel"] = self.getIspValue(newIspCurve, "1")
+        newIsp["Vacuum"] = self.getIspValue(newIspCurve, "0")
+        self.isp =self.checkForNoneValueInIsp(newIsp)
 
     def getGimbal(self):
         return CfgParser.getValueFromKey("gimbalRange", self.partDict)

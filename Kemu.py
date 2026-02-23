@@ -1,7 +1,7 @@
 import CfgParser
+import EnginePatcher
 import LocalizationParser
 import PartCreator
-from Parts.FuelTank import FuelTank
 import TechTreeModding
 
 from Files import Files
@@ -47,6 +47,14 @@ def getAllParts(directoryName):
 
     return parts
 
+def applyEnginePatches(engines, patchDict):
+    for engine in engines:
+        enginePatch = EnginePatcher.getPatchDict(engine, patchDict)
+        if enginePatch != None:
+            engine.maxThrust = EnginePatcher.getNewMaxThrust(enginePatch)
+            newIspCurve = EnginePatcher.getNewIspCurve(enginePatch)
+            engine.updateIsp(newIspCurve)
+
 # gamedataPath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Kerbal Space Program\\GameData"
 gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
 # gamedataPath = "/home/keith/KSP Temp/GameData"
@@ -61,9 +69,16 @@ fftParts = getAllParts("FarFutureTechnologies")
 stockParts = getAllParts("Squad/Parts")
 mhParts = getAllParts("SquadExpansion/MakingHistory/Parts")
 bgParts = getAllParts("SquadExpansion/Serenity/Parts")
-allParts = nfaParts + nflvParts + ceParts + ctParts + fftParts + stockParts + mhParts + bgParts
 
-# testLines = Files.getLines("testPatch.cfg")
-# testPatchDict = CfgParser.getPatchDict(testLines)
-# from pprint import pp
-# pp(testPatchDict)
+
+testLines = Files.getLines("testPatch.cfg")
+testPatchDict = CfgParser.getPatchDict(testLines)
+print(stockParts[150].title)
+print("prepatch")
+print(stockParts[150].maxThrust)
+print(stockParts[150].isp)
+applyEnginePatches(stockParts, testPatchDict)
+print("postpatch")
+print(stockParts[150].maxThrust)
+print(stockParts[150].isp)
+
