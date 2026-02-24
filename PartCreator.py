@@ -4,6 +4,7 @@ from Parts.Engine import Engine
 from Parts.JetEngine import JetEngine
 from Parts.SolidEngine import SolidEngine
 from Parts.FuelTank import FuelTank
+from Parts.RcsThruster import RcsThruster
 
 def isEngine(partDict):
     return CfgParser.getValueFromKey("maxThrust", partDict) != None
@@ -18,6 +19,9 @@ def isSolidEngine(partDict):
             return True
     return False
 
+def isRcsThruster(partDict):
+    return CfgParser.getValueFromKey("thrusterPower", partDict) != None
+
 def isFuelTank(partDict):
     hasTankCategory = CfgParser.getValueFromKey("category", partDict) == "FuelTank"
     hasPropCategory = CfgParser.getValueFromKey("category", partDict) == "Propulsion" and not isEngine(partDict)
@@ -30,6 +34,8 @@ def createPart(directoryName, partDict, localizationDict):
         return SolidEngine(directoryName, partDict, localizationDict)
     if isEngine(partDict):
         return Engine(directoryName, partDict, localizationDict)
+    if isRcsThruster(partDict):
+        return RcsThruster(directoryName, partDict, localizationDict)
     if isFuelTank(partDict):
         return FuelTank(directoryName, partDict, localizationDict)
     return Part(directoryName, partDict, localizationDict)

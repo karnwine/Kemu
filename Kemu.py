@@ -30,24 +30,32 @@ def getPartDicts(partCfgFilepaths):
     return partDicts
 
 def getAllParts(directoryName):
-    filepaths = Files(gamedataPath, directoryName)
-    localizationLines = Files.getLines(filepaths.localizationPath)
+    files = Files(gamedataPath, directoryName)
+    localizationLines = Files.getLines(files.localizationPath)
     localizationDict = LocalizationParser.getLocalizationDict(localizationLines)
-    partDicts = getPartDicts(filepaths.partCfgFilepaths)
+    partDicts = getPartDicts(files.partCfgFilepaths)
     parts = []
 
     for partDict in partDicts:
         part = PartCreator.createPart(directoryName, partDict, localizationDict)
         parts.append(part)
 
-    if filepaths.cttPatchFilepath != None:
-        cttPatchLines = Files.getLines(filepaths.cttPatchFilepath)
+    if files.cttPatchFilepath != None:
+        cttPatchLines = Files.getLines(files.cttPatchFilepath)
         cttPatchDict = CfgParser.getPatchDict(cttPatchLines)
         parts = TechTreeModding.updatePartsForNewTech(parts, cttPatchDict)
 
     return parts
 
-def applyEnginePatches(engines, patchDict):
+def getPartPatches(directoryName):
+    patchFilepaths = Files(gamedataPath, directoryName).partPatchFilepaths
+    for index, path in enumerate(patchFilepaths):
+        print(f"{index:02} {path}")
+    return patchFilepaths
+
+def applyEnginePatch(engines, patchFilePaths, patchNumber):
+    patchLines = Files.getLines(patchFilePaths[patchNumber])
+    patchDict = CfgParser.getPatchDict(patchLines)
     for engine in engines:
         enginePatch = EnginePatcher.getPatchDict(engine, patchDict)
         if enginePatch != None:
@@ -56,8 +64,8 @@ def applyEnginePatches(engines, patchDict):
             engine.updateIsp(newIspCurve)
 
 # gamedataPath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Kerbal Space Program\\GameData"
-gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
-# gamedataPath = "/home/keith/KSP Temp/GameData"
+# gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
+gamedataPath = "/home/keith/KSP Temp/GameData"
 
 techTierData = Files.getCsvData("kttTechTiers.csv")
 
@@ -70,15 +78,18 @@ stockParts = getAllParts("Squad/Parts")
 mhParts = getAllParts("SquadExpansion/MakingHistory/Parts")
 bgParts = getAllParts("SquadExpansion/Serenity/Parts")
 
+# cePatches = getPartPatches("CryoEngines")
+# print(stockParts[150].title)
+# print("prepatch")
+# print(stockParts[150].maxThrust)
+# print(stockParts[150].isp)
+# applyEnginePatch(stockParts, cePatches, 0)
+# print("postpatch")
+# print(stockParts[150].maxThrust)
+# print(stockParts[150].isp)
 
-testLines = Files.getLines("testPatch.cfg")
-testPatchDict = CfgParser.getPatchDict(testLines)
-print(stockParts[150].title)
-print("prepatch")
-print(stockParts[150].maxThrust)
-print(stockParts[150].isp)
-applyEnginePatches(stockParts, testPatchDict)
-print("postpatch")
-print(stockParts[150].maxThrust)
-print(stockParts[150].isp)
+from Parts.RcsThruster import RcsThruster
+for part in stockParts:
+    if isinstance(part, RcsThruster):
+        print("RCS")
 

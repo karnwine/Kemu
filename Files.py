@@ -85,11 +85,11 @@ class Files:
         return partCfgFilepaths
 
     def getPartPatchFilepaths(self, cfgFilepaths):
-        patchCfgFilepaths = []
+        partPatchFilepaths = []
         for filepath in cfgFilepaths:
             lines = Files.getLines(filepath)
             for line in lines:
                 if "@PART" in line:
-                    patchCfgFilepaths.append(Path(filepath))
+                    partPatchFilepaths.append(Path(filepath))
                     break
-        return patchCfgFilepaths
+        return partPatchFilepaths
