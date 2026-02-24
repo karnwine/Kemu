@@ -1,4 +1,5 @@
-import csv, io, sys
+import csv, io
+import CfgParser
 from pathlib import Path
 from Parts.Engine import Engine
 from Parts.JetEngine import JetEngine
@@ -10,10 +11,23 @@ def lookupTechTreeTier(techTierData, techNode):
             return row[1]
     return "TECH NODE NOT FOUND"
 
+def parseNewTechDict(newTechDict):
+    parsedDict = {}
+    for key, value in newTechDict.items():
+        key = key.split(":")[0]
+        key = key.split("@")[1]
+        key = key.split("[")[1]
+        key = key.split("]")[0].strip()
+        value = value["TechRequired"]
+        parsedDict[key] = value
+    return parsedDict
+
 def updatePartsForNewTech(parts, newTechDict):
+    newTechDict = parseNewTechDict(newTechDict)
     for part in parts:
-        if part.name in newTechDict:
-            part.tech = newTechDict[part.name]
+        for key in newTechDict.keys():
+            if part.name == key:
+                part.tech = newTechDict[key]
     return parts
 
 def createCsv(filename, columnNames, rows):
@@ -102,7 +116,7 @@ def createCsvForJetEngineBalancing(parts, techTierData):
                    "Isp(s)", "Gimbal Range", "Tech Node", "Tech Tier",]
     rows = generateJetEngineBalancingCsvData(parts, techTierData)
     createCsv(filename, columnNames, rows)
-    
+
 def getNewTechDictFromCsv(filepath):
     newTechDict = {}
     with open(filepath, 'r', encoding="UTF-8") as csvfile:

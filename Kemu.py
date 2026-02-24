@@ -82,10 +82,19 @@ fftParts = getAllParts("FarFutureTechnologies")
 stockParts = getAllParts("Squad/Parts")
 mhParts = getAllParts("SquadExpansion/MakingHistory/Parts")
 bgParts = getAllParts("SquadExpansion/Serenity/Parts")
-allParts = nfaParts + nflvParts + ceParts + ctParts + fftParts + stockParts + mhParts + bgParts
 
 # cePatches = getPartPatches("CryoEngines")
 # listPartPatches("CryoEngines")
+
+# print(stockParts[150].title)
+# print(stockParts[150].maxThrust)
+# print(stockParts[150].isp)
+# applyEnginePatch(stockParts, cePatches, 3)
+# print("patched")
+# print(stockParts[150].maxThrust)
+# print(stockParts[150].isp)
+
+
 
 
 
