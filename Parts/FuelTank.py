@@ -1,9 +1,8 @@
-import CfgParser
 from Parts.Part import Part
 
 class FuelTank(Part):
 
-    fuelNames = ["LiquidFuel", "MonoPropellant"]
+    fuelNames = ["LiquidFuel", "MonoPropellant", "XenonGas", "LqdHydrogen", "LqdMethane"]
 
     def __init__(self, directoryName, partDict, localizationDict):
         super().__init__(directoryName, partDict, localizationDict)

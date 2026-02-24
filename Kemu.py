@@ -82,12 +82,10 @@ fftParts = getAllParts("FarFutureTechnologies")
 stockParts = getAllParts("Squad/Parts")
 mhParts = getAllParts("SquadExpansion/MakingHistory/Parts")
 bgParts = getAllParts("SquadExpansion/Serenity/Parts")
+allParts = nfaParts + nflvParts + ceParts + ctParts + fftParts + stockParts + mhParts + bgParts
 
 # cePatches = getPartPatches("CryoEngines")
 # listPartPatches("CryoEngines")
 
-for index, part in enumerate(stockParts):
-    if part.__class__.__name__ == "FuelTank":
-        print(part.fuelCapacity)
 
 
