@@ -7,7 +7,7 @@ def parsePartName(line):
     partName = partName.split("]")[0].strip()
     return partName
 
-def getPatchDict(engine, patchDict):
+def getPatchDictForEngine(engine, patchDict):
     for key, value in patchDict.items():
         if engine.name in key:
             return value
@@ -15,6 +15,9 @@ def getPatchDict(engine, patchDict):
 
 def getNewMaxThrust(enginePatchDict):
     return CfgParser.getValueFromKey("maxThrust", enginePatchDict)
+
+def getNewThrusterPower(enginePatchDict):
+    return CfgParser.getValueFromKey("thrusterPower", enginePatchDict)
 
 def getNewIspCurve(enginePatchDict):
     return CfgParser.getValueFromKey("atmosphereCurve", enginePatchDict)

@@ -1,11 +1,11 @@
 import CfgParser
-from Parts.Part import Part
+from Parts.Engine import Engine
 
-class RcsThruster(Part):
-    
+class RcsThruster(Engine):
+
     def __init__(self, directoryName, partDict, localizationDict):
         super().__init__(directoryName, partDict, localizationDict)
-        self.thrusterPower = self.getThrusterPower()
+        self.maxThrust = self.getThrusterPower()
 
     def getThrusterPower(self):
-        return 69
+        return CfgParser.getValueFromKey("thrusterPower", self.partDict)

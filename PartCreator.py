@@ -20,7 +20,9 @@ def isSolidEngine(partDict):
     return False
 
 def isRcsThruster(partDict):
-    return CfgParser.getValueFromKey("thrusterPower", partDict) != None
+    hasThrusterPower = CfgParser.getValueFromKey("thrusterPower", partDict) != None
+    isNotPod = CfgParser.getValueFromKey("category", partDict) != "Pods"
+    return hasThrusterPower and isNotPod
 
 def isFuelTank(partDict):
     hasTankCategory = CfgParser.getValueFromKey("category", partDict) == "FuelTank"

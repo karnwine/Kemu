@@ -12,6 +12,7 @@ class Part:
         self.size = self.getSize()
         self.tech = ""
         self.cost = ""
+        self.resources = self.getResources()
         self.getPartStats()
 
     def getMod(self, directoryName):
@@ -27,7 +28,7 @@ class Part:
         title = CfgParser.getValueFromKey("title", self.partDict)
         title = LocalizationParser.lookupLocalization(title, localizationDict)
         return title
-    
+
     def convertSize(self, size):
         size = size.strip()
         match size:
@@ -45,7 +46,7 @@ class Part:
                 return "5m"
             case _:
                 return size
-    
+
     def getSize(self):
         size = CfgParser.getValueFromKey("bulkheadProfiles", self.partDict)
         if size == None:
@@ -61,6 +62,9 @@ class Part:
             return convertedSize[0]
 
         return convertedSize
+
+    def getResources(self):
+        return CfgParser.getNodeDicts("RESOURCE", self.partDict)
 
     def getPartStats(self):
         self.name = CfgParser.getValueFromKey("name", self.partDict)

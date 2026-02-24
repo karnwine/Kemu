@@ -48,24 +48,29 @@ def getAllParts(directoryName):
     return parts
 
 def getPartPatches(directoryName):
-    patchFilepaths = Files(gamedataPath, directoryName).partPatchFilepaths
+    return Files(gamedataPath, directoryName).partPatchFilepaths
+
+def listPartPatches(directoryName):
+    patchFilepaths = getPartPatches(directoryName)
     for index, path in enumerate(patchFilepaths):
         print(f"{index:02} {path}")
-    return patchFilepaths
 
 def applyEnginePatch(engines, patchFilePaths, patchNumber):
     patchLines = Files.getLines(patchFilePaths[patchNumber])
     patchDict = CfgParser.getPatchDict(patchLines)
     for engine in engines:
-        enginePatch = EnginePatcher.getPatchDict(engine, patchDict)
+        enginePatch = EnginePatcher.getPatchDictForEngine(engine, patchDict)
         if enginePatch != None:
-            engine.maxThrust = EnginePatcher.getNewMaxThrust(enginePatch)
+            if engine.__class__.__name__ == "RcsThruster":
+                engine.maxThrust = EnginePatcher.getNewThrusterPower(enginePatch)
+            else:
+                engine.maxThrust = EnginePatcher.getNewMaxThrust(enginePatch)
             newIspCurve = EnginePatcher.getNewIspCurve(enginePatch)
             engine.updateIsp(newIspCurve)
 
 # gamedataPath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Kerbal Space Program\\GameData"
-# gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
-gamedataPath = "/home/keith/KSP Temp/GameData"
+gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
+# gamedataPath = "/home/keith/KSP Temp/GameData"
 
 techTierData = Files.getCsvData("kttTechTiers.csv")
 
@@ -79,17 +84,10 @@ mhParts = getAllParts("SquadExpansion/MakingHistory/Parts")
 bgParts = getAllParts("SquadExpansion/Serenity/Parts")
 
 # cePatches = getPartPatches("CryoEngines")
-# print(stockParts[150].title)
-# print("prepatch")
-# print(stockParts[150].maxThrust)
-# print(stockParts[150].isp)
-# applyEnginePatch(stockParts, cePatches, 0)
-# print("postpatch")
-# print(stockParts[150].maxThrust)
-# print(stockParts[150].isp)
+# listPartPatches("CryoEngines")
 
-from Parts.RcsThruster import RcsThruster
-for part in stockParts:
-    if isinstance(part, RcsThruster):
-        print("RCS")
+for index, part in enumerate(stockParts):
+    if part.__class__.__name__ == "FuelTank":
+        print(part.fuelCapacity)
+
 
