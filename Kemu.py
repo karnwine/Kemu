@@ -74,11 +74,11 @@ gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
 
 techTierData = Files.getCsvData("kttTechTiers.csv")
 
-nfaParts = getAllParts("NearFutureAeronautics")
-nflvParts = getAllParts("NearFutureLaunchVehicles")
 ceParts = getAllParts("CryoEngines")
 ctParts = getAllParts("CryoTanks")
 fftParts = getAllParts("FarFutureTechnologies")
+nfaParts = getAllParts("NearFutureAeronautics")
+nflvParts = getAllParts("NearFutureLaunchVehicles")
 stockParts = getAllParts("Squad/Parts")
 mhParts = getAllParts("SquadExpansion/MakingHistory/Parts")
 bgParts = getAllParts("SquadExpansion/Serenity/Parts")

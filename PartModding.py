@@ -1,9 +1,17 @@
 import csv, io
-import CfgParser
-from pathlib import Path
 from Parts.Engine import Engine
 from Parts.JetEngine import JetEngine
 from Parts.SolidEngine import SolidEngine
+
+def createCsv(filename, columnNames, rows):
+    with open(filename, 'w', encoding="UTF-8", newline="") as csvfile:
+        csvWriter = csv.writer(csvfile)
+        csvWriter.writerow(columnNames)
+        csvWriter.writerows(rows)
+
+#########################
+### TECH TREE MODDING ###
+#########################
 
 def lookupTechTreeTier(techTierData, techNode):
     for row in techTierData:
@@ -30,11 +38,7 @@ def updatePartsForNewTech(parts, newTechDict):
                 part.tech = newTechDict[key]
     return parts
 
-def createCsv(filename, columnNames, rows):
-    with open(filename, 'w', encoding="UTF-8", newline="") as csvfile:
-        csvWriter = csv.writer(csvfile)
-        csvWriter.writerow(columnNames)
-        csvWriter.writerows(rows)
+## CSVs for Tech Tree Patching
 
 def generateTechTreeCsvData(parts, techTierData):
     csvData = []
@@ -43,12 +47,13 @@ def generateTechTreeCsvData(parts, techTierData):
         csvData.append((part.title, part.category, part.name, part.tech, techTier))
     return csvData
 
-def createCsvForTechTreePatch(parts, techTierData):
-    mod = parts[0].mod
-    filename = f"ForTechTreePatch_{mod}.csv"
+def createCsvForTechTreePatch(csvName, parts, techTierData):
+    filename = f"ForTechTreePatch_{csvName}.csv"
     columnNames = ["Part Title", "Part Category", "Part Name", "Tech Node", "Tech Tier"]
     rows = generateTechTreeCsvData(parts, techTierData)
     createCsv(filename, columnNames, rows)
+
+## Liquid-Fuel Engine CSVs
 
 def generateEngineBalancingCsvData(parts, techTierData):
     csvData = []
@@ -66,13 +71,14 @@ def generateEngineBalancingCsvData(parts, techTierData):
                         ispAsl, ispVac, ispDiff, part.gimbal, part.tech, techTier))
     return csvData
 
-def createCsvForEngineBalancing(parts, techTierData):
-    mod = parts[0].mod
-    filename = f"ForEngineBalancing_{mod}.csv"
+def createCsvForEngineBalancing(csvName, parts, techTierData):
+    filename = f"ForEngineBalancing_{csvName}.csv"
     columnNames = ["Part Title", "Mod", "Part Name", "Cost", "Size", "Max Thrust", "Isp (ASL)",
                    "Isp (Vac)", "Isp Diff", "Gimbal Range", "Tech Node", "Tech Tier"]
     rows = generateEngineBalancingCsvData(parts, techTierData)
     createCsv(filename, columnNames, rows)
+
+## SRB CSVs
 
 def generateSolidEngineBalancingCsvData(parts, techTierData):
     csvData = []
@@ -86,13 +92,14 @@ def generateSolidEngineBalancingCsvData(parts, techTierData):
                         part.solidFuel, ispAsl, part.gimbal, part.tech, techTier))
     return csvData
 
-def createCsvForSolidEngineBalancing(parts, techTierData):
-    mod = parts[0].mod
-    filename = f"ForSolidEngineBalancing_{mod}.csv"
+def createCsvForSolidEngineBalancing(csvName, parts, techTierData):
+    filename = f"ForSolidEngineBalancing_{csvName}.csv"
     columnNames = ["Part Title", "Mod", "Part Name", "Cost", "Size", "Max Thrust",
                    "Solid Fuel", "Isp (ASL)", "Gimbal Range", "Tech Node", "Tech Tier"]
     rows = generateSolidEngineBalancingCsvData(parts, techTierData)
     createCsv(filename, columnNames, rows)
+
+## Jet-Engine CSVs
 
 def isMultimode(engine):
     return isinstance(engine.maxThrust, dict)
@@ -109,13 +116,14 @@ def generateJetEngineBalancingCsvData(parts, techTierData):
                         maxThrustSecondary, part.isp, part.gimbal, part.tech, techTier))
     return csvData
 
-def createCsvForJetEngineBalancing(parts, techTierData):
-    mod = parts[0].mod
-    filename = f"ForJetEngineBalancing_{mod}.csv"
+def createCsvForJetEngineBalancing(csvName, parts, techTierData):
+    filename = f"ForJetEngineBalancing_{csvName}.csv"
     columnNames = ["Part Title", "Mod", "Part Name", "Cost", "Size", "Max Thrust", "Max Thrust (Secondary)",
                    "Isp(s)", "Gimbal Range", "Tech Node", "Tech Tier",]
     rows = generateJetEngineBalancingCsvData(parts, techTierData)
     createCsv(filename, columnNames, rows)
+
+## Patch Writing for Tech Nodes and Part Cost
 
 def getNewTechDictFromCsv(filepath):
     newTechDict = {}
@@ -137,6 +145,17 @@ def createTechTreePatch(parts, techTierData):
             file.write("{\n")
             file.write(f"\t@techRequired = {part.tech} // Tier {techTier}\n")
             file.write("}\n")
+
+def getPartCostDictFromCsv(filepath):
+    newCostDict = {}
+    with open(filepath, 'r', encoding='UTF-8') as csvfile:
+        csvReader = csv.reader(csvfile)
+        next(csvReader)
+        for row in csvReader:
+            partName = row[2]
+            cost = row[3]
+            newCostDict[partName] = cost
+    return newCostDict
 
 def createPartCostPatch(parts):
     modName = parts[0].mod
