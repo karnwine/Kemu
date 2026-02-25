@@ -2,7 +2,7 @@ import CfgParser
 import EnginePatcher
 import LocalizationParser
 import PartCreator
-import TechTreeModding
+import PartModding
 
 from Files import Files
 
@@ -43,7 +43,7 @@ def getAllParts(directoryName):
     if files.cttPatchFilepath != None:
         cttPatchLines = Files.getLines(files.cttPatchFilepath)
         cttPatchDict = CfgParser.getPatchDict(cttPatchLines)
-        parts = TechTreeModding.updatePartsForNewTech(parts, cttPatchDict)
+        parts = PartModding.updatePartsForNewTech(parts, cttPatchDict)
 
     return parts
 
@@ -93,6 +93,8 @@ bgParts = getAllParts("SquadExpansion/Serenity/Parts")
 # print("patched")
 # print(stockParts[150].maxThrust)
 # print(stockParts[150].isp)
+
+
 
 
 

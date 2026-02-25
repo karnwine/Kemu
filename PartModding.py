@@ -137,3 +137,12 @@ def createTechTreePatch(parts, techTierData):
             file.write("{\n")
             file.write(f"\t@techRequired = {part.tech} // Tier {techTier}\n")
             file.write("}\n")
+
+def createPartCostPatch(parts):
+    modName = parts[0].mod
+    with io.open(f"PartCostPatch_{modName}.cfg", 'w', encoding="UTF-8") as file:
+        for part in parts:
+            file.write(f"@PART[{part.name}]:FINAL // {part.title}\n")
+            file.write("{\n")
+            file.write(f"\t@cost = {part.cost}\n")
+            file.write("}\n")
