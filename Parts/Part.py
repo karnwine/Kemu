@@ -19,7 +19,9 @@ class Part:
     def getPath(self):
         path = str(self.partDict.get("PATH"))
         path = path.lower()
-        subStr = path.find("parts") + 6
+        if "\\" in path:
+            path = path.replace("\\", "/")
+        subStr = path.find("parts/") + 6
         path = path[subStr:]
         return path
 

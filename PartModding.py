@@ -53,8 +53,9 @@ def generateTechTreeCsvData(parts, techTierData):
         csvData.append((part.title, part.category, part.path, part.name, part.tech, techTier))
     return csvData
 
-def createCsvForTechTreePatch(csvName, parts, techTierData):
-    filename = f"ForTechTreePatch_{csvName}.csv"
+def createCsvForTechTreePatch(parts, techTierData):
+    mod = parts[0].mod
+    filename = f"ForTechTreePatch_{mod}.csv"
     columnNames = ["Part Title", "Part Category", "Part Path", "Part Name", "Tech Node", "Tech Tier"]
     rows = generateTechTreeCsvData(parts, techTierData)
     createCsv(filename, columnNames, rows)
