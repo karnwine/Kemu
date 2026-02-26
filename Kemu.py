@@ -74,29 +74,26 @@ gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
 
 techTierData = Files.getCsvData("kttTechTiers.csv")
 
-ceParts = getAllParts("CryoEngines")
-ctParts = getAllParts("CryoTanks")
-fftParts = getAllParts("FarFutureTechnologies")
-nfaParts = getAllParts("NearFutureAeronautics")
-nflvParts = getAllParts("NearFutureLaunchVehicles")
-stockParts = getAllParts("Squad/Parts")
-mhParts = getAllParts("SquadExpansion/MakingHistory/Parts")
-bgParts = getAllParts("SquadExpansion/Serenity/Parts")
-
-# cePatches = getPartPatches("CryoEngines")
-# listPartPatches("CryoEngines")
-
-# print(stockParts[150].title)
-# print(stockParts[150].maxThrust)
-# print(stockParts[150].isp)
-# applyEnginePatch(stockParts, cePatches, 3)
-# print("patched")
-# print(stockParts[150].maxThrust)
-# print(stockParts[150].isp)
-
-
-
-
-
-
-
+# ceParts = getAllParts("CryoEngines")
+# ctParts = getAllParts("CryoTanks")
+# fftParts = getAllParts("FarFutureTechnologies")
+# hcParts = getAllParts("HeatControl")
+# kaParts = getAllParts("KerbalAtomics")
+# kerbParts = getAllParts("KerbalismConfig")    # ctt patch needs manual parsing
+# m4Parts = getAllParts("MarkIVSystem")
+# nfaParts = getAllParts("NearFutureAeronautics")
+# nfcParts = getAllParts("NearFutureConstruction")
+# nfelParts = getAllParts("NearFutureElectrical")
+# nfexParts = getAllParts("NearFutureExploration")
+# nflvParts = getAllParts("NearFutureLaunchVehicles")
+# nfpParts = getAllParts("NearFuturePropulsion")
+# nfsolParts = getAllParts("NearFutureSolar")
+# nfscParts = getAllParts("NearFutureSpacecraft")
+# rsPlusParts = getAllParts("ReStockPlus")
+# scanParts = getAllParts("SCANsat")
+# sdParts = getAllParts("SpaceDust")
+# sspxParts = getAllParts("StationPartsExpansionRedux")
+# shParts = getAllParts("SystemHeat")
+# stockParts = getAllParts("Squad/Parts")
+# stockExMhParts = getAllParts("SquadExpansion/MakingHistory/Parts")
+# stockExBgParts = getAllParts("SquadExpansion/Serenity/Parts")

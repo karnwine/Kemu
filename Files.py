@@ -21,9 +21,13 @@ class Files:
     @staticmethod
     def getLines(filepath):
         lines = []
-        with open(filepath, "r", encoding="UTF-8") as currentFile:
-            for line in currentFile.readlines():
-                lines.append(line.strip())
+        try:
+            with open(filepath, "r", encoding="ANSI") as currentFile:
+                for line in currentFile.readlines():
+                    lines.append(line.strip())
+        except Exception:
+            print(f"Error reading file lines: {filepath}")
+            sys.exit()
         return lines
 
     @staticmethod
@@ -47,6 +51,8 @@ class Files:
             localizationPath = Path(gamedataPath) / Path("Squad/Localization/dictionary.cfg")
         elif directoryName == "SquadExpansion/Serenity/Parts":
             localizationPath = Path(gamedataPath) / Path("SquadExpansion/Serenity/Localization/dictionary.cfg")
+        elif directoryName == "SCANsat":
+            localizationPath = Path(gamedataPath) / Path("SCANsat/Resources/Localization/en-us/Parts.cfg")
         else:
             localizationPath =Path(gamedataPath) / Path(f"{directoryName}/Localization/en-us.cfg")
         if not localizationPath.exists():

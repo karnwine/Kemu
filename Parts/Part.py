@@ -5,6 +5,7 @@ class Part:
 
     def __init__(self, directoryName, partDict, localizationDict):
         self.partDict = partDict
+        self.path = self.getPath()
         self.name = ""
         self.mod = self.getMod(directoryName)
         self.category = ""
@@ -14,6 +15,13 @@ class Part:
         self.cost = ""
         self.resources = self.getResources()
         self.getPartStats()
+
+    def getPath(self):
+        path = str(self.partDict.get("PATH"))
+        path = path.lower()
+        subStr = path.find("parts") + 6
+        path = path[subStr:]
+        return path
 
     def getMod(self, directoryName):
         if "makinghistory" in directoryName.lower():

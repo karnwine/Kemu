@@ -22,6 +22,8 @@ def lookupTechTreeTier(techTierData, techNode):
 def parseNewTechDict(newTechDict):
     parsedDict = {}
     for key, value in newTechDict.items():
+        if "TechRequired" not in value:
+            continue
         key = key.split(":")[0]
         key = key.split("@")[1]
         key = key.split("[")[1]
@@ -31,7 +33,11 @@ def parseNewTechDict(newTechDict):
     return parsedDict
 
 def updatePartsForNewTech(parts, newTechDict):
-    newTechDict = parseNewTechDict(newTechDict)
+    try:
+        newTechDict = parseNewTechDict(newTechDict)
+    except Exception:
+        print("Error parsing part patch.")
+        return parts
     for part in parts:
         for key in newTechDict.keys():
             if part.name == key:
@@ -44,12 +50,12 @@ def generateTechTreeCsvData(parts, techTierData):
     csvData = []
     for part in parts:
         techTier = lookupTechTreeTier(techTierData, part.tech)
-        csvData.append((part.title, part.category, part.name, part.tech, techTier))
+        csvData.append((part.title, part.category, part.path, part.name, part.tech, techTier))
     return csvData
 
 def createCsvForTechTreePatch(csvName, parts, techTierData):
     filename = f"ForTechTreePatch_{csvName}.csv"
-    columnNames = ["Part Title", "Part Category", "Part Name", "Tech Node", "Tech Tier"]
+    columnNames = ["Part Title", "Part Category", "Part Path", "Part Name", "Tech Node", "Tech Tier"]
     rows = generateTechTreeCsvData(parts, techTierData)
     createCsv(filename, columnNames, rows)
 
