@@ -69,6 +69,8 @@ def generateEngineBalancingCsvData(parts, techTierData):
             continue
         if isinstance(part, JetEngine):
             continue
+        if isinstance(part, SolidEngine):
+            continue
 
         techTier = lookupTechTreeTier(techTierData, part.tech)
         ispAsl = float(part.isp['SeaLevel'])

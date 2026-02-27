@@ -103,8 +103,8 @@ directoryNames = {0: "CryoEngines", 1: "CryoTanks", 2: "FarFutureTechnologies", 
                   16: "SCANsat", 17: "SpaceDust", 18: "StationPartsExpansionRedux", 19: "SystemHeat",
                   20: "Squad/Parts", 21: "SquadExpansion/MakingHistory/Parts", 22: "SquadExpansion/Serenity/Parts"}
 
-mod = directoryNames[0]
-parts = getParts(directoryNames[0])
-PartModding.createCsvForEngineBalancing(mod, parts, techTierData)
+mod = directoryNames[21]
+parts = getParts(mod)
+PartModding.createCsvForEngineBalancing("MakingHistory", parts, techTierData)
 
 # User edit csv here

@@ -8,6 +8,7 @@ class Engine(Part):
         self.maxThrust = self.getMaxThrust()
         self.isp = self.getIsp()
         self.gimbal = self.getGimbal()
+        self.updateEngineSize()
 
     def getMaxThrust(self):
         return CfgParser.getValueFromKey("maxThrust", self.partDict)
@@ -43,3 +44,11 @@ class Engine(Part):
 
     def getGimbal(self):
         return CfgParser.getValueFromKey("gimbalRange", self.partDict)
+
+    def updateEngineSize(self):
+        if type(self.size) == str:
+            return
+        self.size.remove("srf")
+        self.size = self.size[0]
+
+
