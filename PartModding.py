@@ -71,8 +71,8 @@ def generateEngineBalancingCsvData(parts, techTierData):
             continue
 
         techTier = lookupTechTreeTier(techTierData, part.tech)
-        ispAsl = int(part.isp['SeaLevel'])
-        ispVac = int(part.isp['Vacuum'])
+        ispAsl = float(part.isp['SeaLevel'])
+        ispVac = float(part.isp['Vacuum'])
         ispDiff = ispVac - ispAsl
         csvData.append((part.title, part.mod, part.name, part.cost, part.size, part.maxThrust,
                         ispAsl, ispVac, ispDiff, part.gimbal, part.tech, techTier))
@@ -132,14 +132,24 @@ def createCsvForJetEngineBalancing(csvName, parts, techTierData):
 
 ## Patch Writing for Tech Nodes and Part Cost
 
+def getColumnIndex(filepath, searchTerm):
+    with open(filepath, 'r', encoding="UTF-8") as csvfile:
+        csvReader = csv.reader(csvfile)
+        columnNames = next(csvReader)
+        for index, columnName in enumerate(columnNames):
+            if columnName == searchTerm:
+                return index
+
 def getNewTechDictFromCsv(filepath):
     newTechDict = {}
+    partNameColumnIndex = getColumnIndex(filepath, "Part Name")
+    techNodeColumnIndex = getColumnIndex(filepath, "Tech Node")
     with open(filepath, 'r', encoding="UTF-8") as csvfile:
         csvReader = csv.reader(csvfile)
         next(csvReader)
         for row in csvReader:
-            partName = row[2]
-            newTech = row[3]
+            partName = row[partNameColumnIndex]
+            newTech = row[techNodeColumnIndex]
             newTechDict[partName] = newTech
     return newTechDict
 
@@ -155,12 +165,14 @@ def createTechTreePatch(parts, techTierData):
 
 def getPartCostDictFromCsv(filepath):
     newCostDict = {}
+    partNameColumnIndex = getColumnIndex(filepath, "Part Name")
+    costColumnIndex = getColumnIndex(filepath, "Tech Node")
     with open(filepath, 'r', encoding='UTF-8') as csvfile:
         csvReader = csv.reader(csvfile)
         next(csvReader)
         for row in csvReader:
-            partName = row[2]
-            cost = row[3]
+            partName = row[partNameColumnIndex]
+            cost = row[costColumnIndex]
             newCostDict[partName] = cost
     return newCostDict
 

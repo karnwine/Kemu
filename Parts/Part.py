@@ -21,7 +21,7 @@ class Part:
         path = path.lower()
         if "\\" in path:
             path = path.replace("\\", "/")
-        subStr = path.find("parts/") + 6
+        subStr = path.find("parts/") + 5
         path = path[subStr:]
         return path
 

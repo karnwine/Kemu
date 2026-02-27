@@ -27,7 +27,7 @@ class Files:
                     lines.append(line.strip())
         except Exception:
             print(f"Error reading file lines: {filepath}")
-            sys.exit()
+            # sys.exit()
         return lines
 
     @staticmethod
@@ -56,8 +56,7 @@ class Files:
         else:
             localizationPath =Path(gamedataPath) / Path(f"{directoryName}/Localization/en-us.cfg")
         if not localizationPath.exists():
-            print("Could not find localization file.")
-            sys.exit()
+            print("Warning: Could not find localization file.")
         return localizationPath
 
     def getCfgFilepaths(self, modPath):

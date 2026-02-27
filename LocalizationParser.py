@@ -9,6 +9,8 @@ def getLocalizationDict(localizationFileLines):
     return localizationDict
 
 def lookupLocalization(value, localizationDict):
+    if localizationDict == {}:
+        return value
     for key in localizationDict.keys():
         if value == key:
             return localizationDict[key]

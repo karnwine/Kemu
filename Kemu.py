@@ -29,7 +29,7 @@ def getPartDicts(partCfgFilepaths):
 
     return partDicts
 
-def getAllParts(directoryName):
+def getParts(directoryName):
     files = Files(gamedataPath, directoryName)
     localizationLines = Files.getLines(files.localizationPath)
     localizationDict = LocalizationParser.getLocalizationDict(localizationLines)
@@ -47,12 +47,27 @@ def getAllParts(directoryName):
 
     return parts
 
+def getAllParts(directoryNames):
+    allParts = []
+    for directoryName in directoryNames:
+        parts = getParts(directoryName)
+        allParts.extend(parts)
+    return allParts
+
 def getPartPatches(directoryName):
     return Files(gamedataPath, directoryName).partPatchFilepaths
 
 def listPartPatches(directoryName):
     patchFilepaths = getPartPatches(directoryName)
+    for path in patchFilepaths:
+        print(path)
+
+def indexPartPatches(directoryName):
+    patchFilepaths = getPartPatches(directoryName)
     for index, path in enumerate(patchFilepaths):
+        path = str(path)
+        subStr = path.find("GameData") + 9
+        path = path[subStr:]
         print(f"{index:02} {path}")
 
 def applyEnginePatch(engines, patchFilePaths, patchNumber):
@@ -68,56 +83,28 @@ def applyEnginePatch(engines, patchFilePaths, patchNumber):
             newIspCurve = EnginePatcher.getNewIspCurve(enginePatch)
             engine.updateIsp(newIspCurve)
 
+def generateTechTreeCSVs(directoryNames):
+    for directoryName in directoryNames:
+        parts = getParts(directoryName)
+        PartModding.createCsvForTechTreePatch(parts, techTierData)
+
+
+
 # gamedataPath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Kerbal Space Program\\GameData"
 gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
 # gamedataPath = "/home/keith/KSP Temp/GameData"
 
 techTierData = Files.getCsvData("kttTechTiers.csv")
 
-ceParts = getAllParts("CryoEngines")
-ctParts = getAllParts("CryoTanks")
-fftParts = getAllParts("FarFutureTechnologies")
-hcParts = getAllParts("HeatControl")
-kaParts = getAllParts("KerbalAtomics")
-kerbParts = getAllParts("KerbalismConfig")    # ctt patch needs manual parsing
-m4Parts = getAllParts("MarkIVSystem")
-nfaParts = getAllParts("NearFutureAeronautics")
-nfcParts = getAllParts("NearFutureConstruction")
-nfelParts = getAllParts("NearFutureElectrical")
-nfexParts = getAllParts("NearFutureExploration")
-nflvParts = getAllParts("NearFutureLaunchVehicles")
-nfpParts = getAllParts("NearFuturePropulsion")
-nfsolParts = getAllParts("NearFutureSolar")
-nfscParts = getAllParts("NearFutureSpacecraft")
-rsPlusParts = getAllParts("ReStockPlus")
-scanParts = getAllParts("SCANsat")
-sdParts = getAllParts("SpaceDust")
-sspxParts = getAllParts("StationPartsExpansionRedux")
-shParts = getAllParts("SystemHeat")
-stockParts = getAllParts("Squad/Parts")
-stockExMhParts = getAllParts("SquadExpansion/MakingHistory/Parts")
-stockExBgParts = getAllParts("SquadExpansion/Serenity/Parts")
+directoryNames = {0: "CryoEngines", 1: "CryoTanks", 2: "FarFutureTechnologies", 3: "HeatControl", 4: "KerbalAtomics",
+                  5: "KerbalismConfig", 6: "MarkIVSystem", 7: "NearFutureAeronautics", 8: "NearFutureConstruction",
+                  9: "NearFutureElectrical", 10: "NearFutureExploration", 11: "NearFutureLaunchVehicles",
+                  12: "NearFuturePropulsion", 13: "NearFutureSolar", 14: "NearFutureSpacecraft", 15: "ReStockPlus",
+                  16: "SCANsat", 17: "SpaceDust", 18: "StationPartsExpansionRedux", 19: "SystemHeat",
+                  20: "Squad/Parts", 21: "SquadExpansion/MakingHistory/Parts", 22: "SquadExpansion/Serenity/Parts"}
 
-PartModding.createCsvForTechTreePatch(ceParts, techTierData)
-PartModding.createCsvForTechTreePatch(ctParts, techTierData)
-PartModding.createCsvForTechTreePatch(fftParts, techTierData)
-PartModding.createCsvForTechTreePatch(hcParts, techTierData)
-PartModding.createCsvForTechTreePatch(kaParts, techTierData)
-PartModding.createCsvForTechTreePatch(kerbParts, techTierData)
-PartModding.createCsvForTechTreePatch(m4Parts, techTierData)
-PartModding.createCsvForTechTreePatch(nfaParts, techTierData)
-PartModding.createCsvForTechTreePatch(nfcParts, techTierData)
-PartModding.createCsvForTechTreePatch(nfelParts, techTierData)
-PartModding.createCsvForTechTreePatch(nfexParts, techTierData)
-PartModding.createCsvForTechTreePatch(nflvParts, techTierData)
-PartModding.createCsvForTechTreePatch(nfpParts, techTierData)
-PartModding.createCsvForTechTreePatch(nfsolParts, techTierData)
-PartModding.createCsvForTechTreePatch(nfscParts, techTierData)
-PartModding.createCsvForTechTreePatch(rsPlusParts, techTierData)
-PartModding.createCsvForTechTreePatch(scanParts, techTierData)
-PartModding.createCsvForTechTreePatch(sdParts, techTierData)
-PartModding.createCsvForTechTreePatch(sspxParts, techTierData)
-PartModding.createCsvForTechTreePatch(shParts, techTierData)
-PartModding.createCsvForTechTreePatch(stockParts, techTierData)
-PartModding.createCsvForTechTreePatch(stockExMhParts, techTierData)
-PartModding.createCsvForTechTreePatch(stockExBgParts, techTierData)
+mod = directoryNames[0]
+parts = getParts(directoryNames[0])
+PartModding.createCsvForEngineBalancing(mod, parts, techTierData)
+
+# User edit csv here
