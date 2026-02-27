@@ -22,7 +22,7 @@ class Files:
     def getLines(filepath):
         lines = []
         try:
-            with open(filepath, "r", encoding="ANSI") as currentFile:
+            with open(filepath, "r", encoding="UTF-8") as currentFile:
                 for line in currentFile.readlines():
                     lines.append(line.strip())
         except Exception:

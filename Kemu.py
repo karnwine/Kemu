@@ -91,20 +91,37 @@ def generateTechTreeCSVs(directoryNames):
 
 
 # gamedataPath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Kerbal Space Program\\GameData"
-gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
-# gamedataPath = "/home/keith/KSP Temp/GameData"
+# gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
+gamedataPath = "/home/keith/KSP Temp/GameData"
 
 techTierData = Files.getCsvData("kttTechTiers.csv")
 
-directoryNames = {0: "CryoEngines", 1: "CryoTanks", 2: "FarFutureTechnologies", 3: "HeatControl", 4: "KerbalAtomics",
-                  5: "KerbalismConfig", 6: "MarkIVSystem", 7: "NearFutureAeronautics", 8: "NearFutureConstruction",
-                  9: "NearFutureElectrical", 10: "NearFutureExploration", 11: "NearFutureLaunchVehicles",
-                  12: "NearFuturePropulsion", 13: "NearFutureSolar", 14: "NearFutureSpacecraft", 15: "ReStockPlus",
-                  16: "SCANsat", 17: "SpaceDust", 18: "StationPartsExpansionRedux", 19: "SystemHeat",
-                  20: "Squad/Parts", 21: "SquadExpansion/MakingHistory/Parts", 22: "SquadExpansion/Serenity/Parts"}
+directoryNames = {0: "CryoEngines",
+                  1: "CryoTanks",
+                  2: "FarFutureTechnologies",
+                  3: "HeatControl",
+                  4: "KerbalAtomics",
+                  5: "KerbalismConfig",
+                  6: "MarkIVSystem",
+                  7: "NearFutureAeronautics",
+                  8: "NearFutureConstruction",
+                  9: "NearFutureElectrical",
+                  10: "NearFutureExploration",
+                  11: "NearFutureLaunchVehicles",
+                  12: "NearFuturePropulsion",
+                  13: "NearFutureSolar",
+                  14: "NearFutureSpacecraft",
+                  15: "ReStockPlus",
+                  16: "SCANsat",
+                  17: "SpaceDust",
+                  18: "StationPartsExpansionRedux",
+                  19: "SystemHeat",
+                  20: "Squad/Parts",
+                  21: "SquadExpansion/MakingHistory/Parts",
+                  22: "SquadExpansion/Serenity/Parts"}
 
-mod = directoryNames[21]
+mod = directoryNames[20]
 parts = getParts(mod)
-PartModding.createCsvForEngineBalancing("MakingHistory", parts, techTierData)
+PartModding.createCsvForEngineBalancing("Stock", parts, techTierData)
 
 # User edit csv here
