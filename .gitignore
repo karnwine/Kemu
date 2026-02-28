@@ -1,6 +1,6 @@
 venv/
 __pycache__/
-vs/
+.vs/
 *.cfg
 !testPatch.cfg
 !testCttPatch.cfg
