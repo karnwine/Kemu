@@ -90,9 +90,9 @@ def generateTechTreeCSVs(directoryNames):
 
 
 
-# gamedataPath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Kerbal Space Program\\GameData"
+gamedataPath = "D:\\Game Files\\Kerbal Space Program\\testKSP\\Kerbal Space Program\\GameData"
 # gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
-gamedataPath = "/home/keith/KSP Temp/GameData"
+# gamedataPath = "/home/keith/KSP Temp/GameData"
 
 techTierData = Files.getCsvData("kttTechTiers.csv")
 
@@ -120,8 +120,8 @@ directoryNames = {0: "CryoEngines",
                   21: "SquadExpansion/MakingHistory/Parts",
                   22: "SquadExpansion/Serenity/Parts"}
 
-mod = directoryNames[20]
+mod = directoryNames[15]
 parts = getParts(mod)
-PartModding.createCsvForEngineBalancing("Stock", parts, techTierData)
+PartModding.createCsvForEngineBalancing("ReStockPlus", parts, techTierData)
 
-# User edit csv here
+
