@@ -96,41 +96,35 @@ def partCountCheck(parts):
     print()
 
 
-gamedataPath = "D:\\Game Files\\Kerbal Space Program\\testKSP\\Kerbal Space Program\\GameData"
+# gamedataPath = "D:\\Game Files\\Kerbal Space Program\\testKSP\\Kerbal Space Program\\GameData"
 # gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
-# gamedataPath = "/home/keith/KSP Temp/GameData"
+gamedataPath = "/home/keith/KSP Temp/GameData"
 
 techTierData = Files.getCsvData("kttTechTiers.csv")
 
-directoryNames = {3: "HeatControl",
-                  5: "KerbalismConfig",
-                  6: "MarkIVSystem",
-                  7: "NearFutureAeronautics",
-                  8: "NearFutureConstruction",
-                  9: "NearFutureElectrical",
-                  10: "NearFutureExploration",
-                  11: "NearFutureLaunchVehicles",
-                  12: "NearFuturePropulsion",
-                  13: "NearFutureSolar",
-                  14: "NearFutureSpacecraft",
-                  15: "ReStockPlus",
-                  16: "SCANsat",
-                  17: "SpaceDust",
-                  18: "StationPartsExpansionRedux",
-                  20: "Squad/Parts",
-                  21: "SquadExpansion/MakingHistory/Parts",
-                  22: "SquadExpansion/Serenity/Parts"}
+directoryNames = {0: "Squad/Parts",
+                  1: "SquadExpansion/MakingHistory/Parts",
+                  2: "SquadExpansion/Serenity/Parts",
+                  3: "ReStockPlus",
+                  4: "MarkIVSystem",
+                  5: "NearFutureAeronautics",
+                  6: "NearFutureConstruction",
+                  7: "NearFutureElectrical",
+                  8: "NearFutureExploration",
+                  9: "NearFutureLaunchVehicles",
+                  10: "NearFuturePropulsion",
+                  11: "NearFutureSolar",
+                  12: "NearFutureSpacecraft",
+                  13: "HeatControl",
+                  14: "SCANsat",
+                  15: "StationPartsExpansionRedux",}
 
 # parts = getParts(directoryNames[20])
 # PartModding.createCsvForEngineBalancing("Stock", parts, techTierData)
 # PartModding.createCsvForSolidEngineBalancing("Stock", parts, techTierData)
 # PartModding.createCsvForJetEngineBalancing("Stock", parts, techTierData)
 
-stockParts = getParts(directoryNames[20])
-mhParts = getParts(directoryNames[21])
-rspParts = getParts(directoryNames[15])
-nfelParts = getParts(directoryNames[9])
-
+generateTechTreeCSVs(list(directoryNames.values()))
 
 # count = 0
 # for part in nfelParts:
@@ -144,11 +138,4 @@ nfelParts = getParts(directoryNames[9])
 #                 print(f"{part.title}")
 #                 print(part.path)
 # print(count)
-
-
-
-
-
-
-
 
