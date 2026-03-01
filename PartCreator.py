@@ -7,7 +7,9 @@ from Parts.RcsThruster import RcsThruster
 from Parts.FuelTank import FuelTank
 
 def isEngine(partDict):
-    return CfgParser.getValueFromKey("maxThrust", partDict) != None
+    hasMaxThrustValue = CfgParser.getValueFromKey("maxThrust", partDict) != None
+    isNotMhReplacement = CfgParser.getValueFromKey("MHReplacement", partDict) == None
+    return hasMaxThrustValue and isNotMhReplacement
 
 def isJetEngine(partDict):
     return CfgParser.getValueFromKey("velCurve", partDict) != None

@@ -88,6 +88,12 @@ def generateTechTreeCSVs(directoryNames):
         parts = getParts(directoryName)
         PartModding.createCsvForTechTreePatch(parts, techTierData)
 
+def partCountCheck(parts):
+    for index, part in enumerate(parts):
+        print(f"{index:03} {part.title}")
+    print()
+    print(f"\033[92m{len(parts)} parts found in {parts[0].mod} directory.\033[0m")
+    print()
 
 
 gamedataPath = "D:\\Game Files\\Kerbal Space Program\\testKSP\\Kerbal Space Program\\GameData"
@@ -96,11 +102,7 @@ gamedataPath = "D:\\Game Files\\Kerbal Space Program\\testKSP\\Kerbal Space Prog
 
 techTierData = Files.getCsvData("kttTechTiers.csv")
 
-directoryNames = {0: "CryoEngines",
-                  1: "CryoTanks",
-                  2: "FarFutureTechnologies",
-                  3: "HeatControl",
-                  4: "KerbalAtomics",
+directoryNames = {3: "HeatControl",
                   5: "KerbalismConfig",
                   6: "MarkIVSystem",
                   7: "NearFutureAeronautics",
@@ -115,13 +117,38 @@ directoryNames = {0: "CryoEngines",
                   16: "SCANsat",
                   17: "SpaceDust",
                   18: "StationPartsExpansionRedux",
-                  19: "SystemHeat",
                   20: "Squad/Parts",
                   21: "SquadExpansion/MakingHistory/Parts",
                   22: "SquadExpansion/Serenity/Parts"}
 
-mod = directoryNames[15]
-parts = getParts(mod)
-PartModding.createCsvForEngineBalancing("ReStockPlus", parts, techTierData)
+# parts = getParts(directoryNames[20])
+# PartModding.createCsvForEngineBalancing("Stock", parts, techTierData)
+# PartModding.createCsvForSolidEngineBalancing("Stock", parts, techTierData)
+# PartModding.createCsvForJetEngineBalancing("Stock", parts, techTierData)
+
+stockParts = getParts(directoryNames[20])
+mhParts = getParts(directoryNames[21])
+rspParts = getParts(directoryNames[15])
+nfelParts = getParts(directoryNames[9])
+
+
+# count = 0
+# for part in nfelParts:
+#     modules = CfgParser.getAllModules(part.partDict)
+
+#     for module in modules:
+#         for key, value in module.items():
+#             if "ModuleRCSEmissive" in value:
+#                 count += 1
+#                 print()
+#                 print(f"{part.title}")
+#                 print(part.path)
+# print(count)
+
+
+
+
+
+
 
 
