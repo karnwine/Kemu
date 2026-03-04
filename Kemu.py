@@ -89,24 +89,31 @@ directoryNames = {0: "Squad/Parts",
                   13: "SCANsat",
                   14: "StationPartsExpansionRedux",}
 
-# parts = getParts(directoryNames[20])
-# PartModding.createCsvForEngineBalancing("Stock", parts, techTierData)
-# PartModding.createCsvForSolidEngineBalancing("Stock", parts, techTierData)
-# PartModding.createCsvForJetEngineBalancing("Stock", parts, techTierData)
-
 allParts = getAllParts(directoryNames.values())
 
+panelList = []
+for part in allParts:
+    partList = []
+    if "panel" in part.name.lower():
+        partList.append(part.title)
+        partList.append(part.mod)
+        partList.append(part.path)
+        partList.append(part.name)
+        partList.append(part.category)
+        partList.append(CfgParser.getValueFromKey("mass", part.partDict))
+        panelList.append(partList)
 
-# count = 0
-# for part in nfelParts:
-#     modules = CfgParser.getAllModules(part.partDict)
+import csv
 
-#     for module in modules:
-#         for key, value in module.items():
-#             if "ModuleRCSEmissive" in value:
-#                 count += 1
-#                 print()
-#                 print(f"{part.title}")
-#                 print(part.path)
-# print(count)
+def createCsv(filename, columnNames, rows):
+    with open(filename, 'w', encoding="UTF-8", newline="") as csvfile:
+        csvWriter = csv.writer(csvfile)
+        csvWriter.writerow(columnNames)
+        csvWriter.writerows(rows)
+
+for part in allParts:
+    if "battery" in part.name.lower():
+        print(part.title)
+        print(part.cost)
+
 
