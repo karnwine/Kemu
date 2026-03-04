@@ -54,6 +54,8 @@ class Part:
                 return "3.75m"
             case "size4":
                 return "5m"
+            case "size6":
+                return "7.5m"
             case _:
                 return size
 
