@@ -54,35 +54,6 @@ def getAllParts(directoryNames):
         allParts.extend(parts)
     return allParts
 
-def getPartPatches(directoryName):
-    return Files(gamedataPath, directoryName).partPatchFilepaths
-
-def listPartPatches(directoryName):
-    patchFilepaths = getPartPatches(directoryName)
-    for path in patchFilepaths:
-        print(path)
-
-def indexPartPatches(directoryName):
-    patchFilepaths = getPartPatches(directoryName)
-    for index, path in enumerate(patchFilepaths):
-        path = str(path)
-        subStr = path.find("GameData") + 9
-        path = path[subStr:]
-        print(f"{index:02} {path}")
-
-def applyEnginePatch(engines, patchFilePaths, patchNumber):
-    patchLines = Files.getLines(patchFilePaths[patchNumber])
-    patchDict = CfgParser.getPatchDict(patchLines)
-    for engine in engines:
-        enginePatch = EnginePatcher.getPatchDictForEngine(engine, patchDict)
-        if enginePatch != None:
-            if engine.__class__.__name__ == "RcsThruster":
-                engine.maxThrust = EnginePatcher.getNewThrusterPower(enginePatch)
-            else:
-                engine.maxThrust = EnginePatcher.getNewMaxThrust(enginePatch)
-            newIspCurve = EnginePatcher.getNewIspCurve(enginePatch)
-            engine.updateIsp(newIspCurve)
-
 def generateTechTreeCSVs(directoryNames):
     for directoryName in directoryNames:
         parts = getParts(directoryName)
@@ -97,8 +68,8 @@ def partCountCheck(parts):
 
 
 # gamedataPath = "D:\\Game Files\\Kerbal Space Program\\testKSP\\Kerbal Space Program\\GameData"
-# gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
-gamedataPath = "/home/keith/KSP Temp/GameData"
+gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
+# gamedataPath = "/home/keith/KSP Temp/GameData"
 
 techTierData = Files.getCsvData("kttTechTiers.csv")
 
@@ -109,22 +80,22 @@ directoryNames = {0: "Squad/Parts",
                   4: "MarkIVSystem",
                   5: "NearFutureAeronautics",
                   6: "NearFutureConstruction",
-                  7: "NearFutureElectrical",
-                  8: "NearFutureExploration",
-                  9: "NearFutureLaunchVehicles",
-                  10: "NearFuturePropulsion",
-                  11: "NearFutureSolar",
-                  12: "NearFutureSpacecraft",
-                  13: "HeatControl",
-                  14: "SCANsat",
-                  15: "StationPartsExpansionRedux",}
+                  7: "NearFutureExploration",
+                  8: "NearFutureLaunchVehicles",
+                  9: "NearFuturePropulsion",
+                  10: "NearFutureSolar",
+                  11: "NearFutureSpacecraft",
+                  12: "HeatControl",
+                  13: "SCANsat",
+                  14: "StationPartsExpansionRedux",}
 
 # parts = getParts(directoryNames[20])
 # PartModding.createCsvForEngineBalancing("Stock", parts, techTierData)
 # PartModding.createCsvForSolidEngineBalancing("Stock", parts, techTierData)
 # PartModding.createCsvForJetEngineBalancing("Stock", parts, techTierData)
 
-generateTechTreeCSVs(list(directoryNames.values()))
+allParts = getAllParts(directoryNames.values())
+
 
 # count = 0
 # for part in nfelParts:

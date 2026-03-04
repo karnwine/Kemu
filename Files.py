@@ -16,7 +16,6 @@ class Files:
         self.cfgFilepaths = self.getCfgFilepaths(self.modPath)
         self.cttPatchFilepath = self.getCttPatchFilepath(directoryName, self.cfgFilepaths)
         self.partCfgFilepaths = self.getPartCfgFilepaths(self.cfgFilepaths)
-        self.partPatchFilepaths = self.getPartPatchFilepaths(self.cfgFilepaths)
 
     @staticmethod
     def getLines(filepath):
@@ -85,16 +84,8 @@ class Files:
         for filepath in cfgFilepaths:
             checkedFilepath = filepath.lower()
             checkedFilepath = "".join(checkedFilepath.split())
-            if "parts" in checkedFilepath:
+            if "\\" in checkedFilepath:
+                checkedFilepath = checkedFilepath.replace("\\", "/")
+            if "parts/" in checkedFilepath:
                 partCfgFilepaths.append(Path(filepath))
         return partCfgFilepaths
-
-    def getPartPatchFilepaths(self, cfgFilepaths):
-        partPatchFilepaths = []
-        for filepath in cfgFilepaths:
-            lines = Files.getLines(filepath)
-            for line in lines:
-                if "@PART" in line:
-                    partPatchFilepaths.append(Path(filepath))
-                    break
-        return partPatchFilepaths
