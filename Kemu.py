@@ -75,6 +75,28 @@ gamedataPath = "D:\\Game Files\\Kerbal Space Program\\testKSP\\Kerbal Space Prog
 
 techTierData = Files.getCsvData("kttTechTiers.csv")
 
+def parsePart(line):
+    part = line.split("[")[1]
+    return part.split("]")[0].strip()
+
+def parseTech(line):
+    tech = line.split("=")[1]
+    return tech.split("//")[0].strip()
 
 kttMainCfg = r"D:\Cloud Archive\Game Stuff\KSP\Custom Mods\TKO\_wip\kiwiTechTree-master\GameData\KiwiTechTree\Configurations\Core\Main.cfg"
 kttMainCfgLines = Files.getLines(kttMainCfg)
+kttMainData = []
+
+for line in kttMainCfgLines:
+    if "@PART" in line:
+        part = parsePart(line)
+    if "@TechRequired" in line:
+        tech = parseTech(line)
+        kttMainData.append((part, tech))
+
+import csv
+
+with open("kttMainCfg.csv", 'w', encoding="UTF-8", newline="") as csvfile:
+    csvWriter = csv.writer(csvfile)
+    csvWriter.writerow(["part name", "tech"])
+    csvWriter.writerows(kttMainData)
