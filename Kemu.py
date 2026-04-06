@@ -37,6 +37,8 @@ def getParts(directoryName):
     parts = []
 
     for partDict in partDicts:
+        if CfgParser.getValueFromKey("MHReplacement", partDict) != None:
+            continue
         part = PartCreator.createPart(directoryName, partDict, localizationDict)
         parts.append(part)
 
@@ -67,53 +69,12 @@ def partCountCheck(parts):
     print()
 
 
-# gamedataPath = "D:\\Game Files\\Kerbal Space Program\\testKSP\\Kerbal Space Program\\GameData"
-gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
+gamedataPath = "D:\\Game Files\\Kerbal Space Program\\testKSP\\Kerbal Space Program\\GameData"
+# gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
 # gamedataPath = "/home/keith/KSP Temp/GameData"
 
 techTierData = Files.getCsvData("kttTechTiers.csv")
 
-directoryNames = {0: "Squad/Parts",
-                  1: "SquadExpansion/MakingHistory/Parts",
-                  2: "SquadExpansion/Serenity/Parts",
-                  3: "ReStockPlus",
-                  4: "MarkIVSystem",
-                  5: "NearFutureAeronautics",
-                  6: "NearFutureConstruction",
-                  7: "NearFutureExploration",
-                  8: "NearFutureLaunchVehicles",
-                  9: "NearFuturePropulsion",
-                  10: "NearFutureSolar",
-                  11: "NearFutureSpacecraft",
-                  12: "HeatControl",
-                  13: "SCANsat",
-                  14: "StationPartsExpansionRedux",}
 
-allParts = getAllParts(directoryNames.values())
-
-panelList = []
-for part in allParts:
-    partList = []
-    if "panel" in part.name.lower():
-        partList.append(part.title)
-        partList.append(part.mod)
-        partList.append(part.path)
-        partList.append(part.name)
-        partList.append(part.category)
-        partList.append(CfgParser.getValueFromKey("mass", part.partDict))
-        panelList.append(partList)
-
-import csv
-
-def createCsv(filename, columnNames, rows):
-    with open(filename, 'w', encoding="UTF-8", newline="") as csvfile:
-        csvWriter = csv.writer(csvfile)
-        csvWriter.writerow(columnNames)
-        csvWriter.writerows(rows)
-
-for part in allParts:
-    if "battery" in part.name.lower():
-        print(part.title)
-        print(part.cost)
-
-
+kttMainCfg = r"D:\Cloud Archive\Game Stuff\KSP\Custom Mods\TKO\_wip\kiwiTechTree-master\GameData\KiwiTechTree\Configurations\Core\Main.cfg"
+kttMainCfgLines = Files.getLines(kttMainCfg)

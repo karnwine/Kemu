@@ -8,8 +8,7 @@ from Parts.FuelTank import FuelTank
 
 def isEngine(partDict):
     hasMaxThrustValue = CfgParser.getValueFromKey("maxThrust", partDict) != None
-    isNotMhReplacement = CfgParser.getValueFromKey("MHReplacement", partDict) == None
-    return hasMaxThrustValue and isNotMhReplacement
+    return hasMaxThrustValue
 
 def isJetEngine(partDict):
     return CfgParser.getValueFromKey("velCurve", partDict) != None
