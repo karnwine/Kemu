@@ -162,7 +162,7 @@ def createTechTreePatch(parts, techTierData):
             techTier = lookupTechTreeTier(techTierData, part.tech)
             file.write(f"@PART[{part.name}]:FINAL // {part.title}\n")
             file.write("{\n")
-            file.write(f"\t@techRequired = {part.tech} // Tier {techTier}\n")
+            file.write(f"\t@TechRequired = {part.tech} // Tier {techTier}\n")
             file.write("}\n")
 
 def getPartCostDictFromCsv(filepath):

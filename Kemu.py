@@ -68,35 +68,34 @@ def partCountCheck(parts):
     print(f"\033[92m{len(parts)} parts found in {parts[0].mod} directory.\033[0m")
     print()
 
-
 gamedataPath = "D:\\Game Files\\Kerbal Space Program\\testKSP\\Kerbal Space Program\\GameData"
 # gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
 # gamedataPath = "/home/keith/KSP Temp/GameData"
 
 techTierData = Files.getCsvData("kttTechTiers.csv")
 
-def parsePart(line):
-    part = line.split("[")[1]
-    return part.split("]")[0].strip()
+import csv, io
 
-def parseTech(line):
-    tech = line.split("=")[1]
-    return tech.split("//")[0].strip()
+def getTechDataFromCsv(filepath):
+    techData = []
+    with open(filepath, 'r', encoding="UTF-8") as csvfile:
+        csvReader = csv.reader(csvfile)
+        next(csvReader)
+        for row in csvReader:
+            title = row[0]
+            name = row[3]
+            tech = row[4]
+            tier = row[5]
+            techData.append((title, name, tech, tier))
+    return techData
 
-kttMainCfg = r"D:\Cloud Archive\Game Stuff\KSP\Custom Mods\TKO\_wip\kiwiTechTree-master\GameData\KiwiTechTree\Configurations\Core\Main.cfg"
-kttMainCfgLines = Files.getLines(kttMainCfg)
-kttMainData = []
+def createTechTreePatch(modName, techData):
+    with io.open(f"TechTreePatch_{modName}.cfg", 'w', encoding="UTF-8") as file:
+        for item in techData:
+            file.write(f"@PART[{item[1]}]:AFTER[{modName}] // {item[0]}\n")
+            file.write("{\n")
+            file.write(f"\t@TechRequired = {item[2]} // Tier {item[3]}\n")
+            file.write("}\n")
 
-for line in kttMainCfgLines:
-    if "@PART" in line:
-        part = parsePart(line)
-    if "@TechRequired" in line:
-        tech = parseTech(line)
-        kttMainData.append((part, tech))
-
-import csv
-
-with open("kttMainCfg.csv", 'w', encoding="UTF-8", newline="") as csvfile:
-    csvWriter = csv.writer(csvfile)
-    csvWriter.writerow(["part name", "tech"])
-    csvWriter.writerows(kttMainData)
+hcData = getTechDataFromCsv(r"D:\Coding\Python\Kemu\heatControl.csv")
+createTechTreePatch("HeatControl", hcData)
